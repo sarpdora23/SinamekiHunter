@@ -1,6 +1,7 @@
 package com.example.sinamekihunter.Managers;
 
 import com.example.sinamekihunter.Controllers.ControllersParent;
+import com.example.sinamekihunter.Utils.StringValues;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -25,8 +26,10 @@ public class ControllersManager {
     public static ControllersManager getInstance(){
         return instance;
     }
-    public void addController(Scene scene,ControllersParent controller){
+    public void addController(Scene scene, ControllersParent controller, String controllerName){
         active_controllers.put(scene,controller);
+        controller.InitController();
+        active_scenes.put(controllerName,scene);
     }
     public ControllersParent getMainController(){
         return this.mainController;
@@ -45,6 +48,7 @@ public class ControllersManager {
         instance.active_scenes.put(scene_name,newScene);
         instance.active_controllers.put(newScene,controller);
         stage.show();
+        //controller.InitController();
     }
     public void closeScene(Scene old_scene){
         active_controllers.remove(old_scene);

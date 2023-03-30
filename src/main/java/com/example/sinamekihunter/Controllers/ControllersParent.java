@@ -1,5 +1,5 @@
 package com.example.sinamekihunter.Controllers;
 
-public class ControllersParent {
-    public ControllersParent(){};
+public interface ControllersParent {
+    public void InitController();
 }

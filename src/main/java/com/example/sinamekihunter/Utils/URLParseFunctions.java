@@ -1,5 +1,7 @@
 package com.example.sinamekihunter.Utils;
 
+import java.util.regex.Pattern;
+
 public class URLParseFunctions {
     public static String getProtocol(String url){
         return url.substring(0,url.indexOf(":"));
@@ -23,5 +25,12 @@ public class URLParseFunctions {
             index_counter++;
         }
         return url.substring(start_index+1,last_index);
+    }
+    public static String getPureDomain(String domainUrl){
+        String[] strings = domainUrl.split(Pattern.quote("."));
+        if(strings.length == 3){
+            return strings[1] + "." + strings[2];
+        }
+        return strings[0] + "." + strings[1];
     }
 }

@@ -6,4 +6,7 @@ public class DomainModel {
     public DomainModel(String domainUrl){
         this.domainUrl = domainUrl;
     }
+    public String getDomainUrl(){
+        return this.domainUrl;
+    }
 }

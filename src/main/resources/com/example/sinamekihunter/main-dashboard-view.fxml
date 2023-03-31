@@ -12,7 +12,7 @@
 
 <Pane prefHeight="627.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.MainDashboardController">
    <children>
-      <Label layoutX="227.0" layoutY="34.0" text="Target:" />
+      <Label layoutX="329.0" layoutY="37.0" text="Target:" />
       <TabPane fx:id="domainsTabPane" layoutY="64.0" prefHeight="564.0" prefWidth="763.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Domain">
@@ -28,13 +28,23 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Discovery">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Subdomain Discovery" />
+                    <MenuItem mnemonicParsing="false" onAction="#onSelectSubdomainDiscovery" text="Subdomain Discovery" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Scanner">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="XSS" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Settings">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                    </items>
+                  </Menu>
               </menus>
             </MenuBar>
          </children>
       </VBox>
-      <Label fx:id="targetDomainLabel" layoutX="270.0" layoutY="34.0" text="Domain" />
+      <Label fx:id="targetDomainLabel" layoutX="372.0" layoutY="37.0" text="Domain" />
    </children>
 </Pane>

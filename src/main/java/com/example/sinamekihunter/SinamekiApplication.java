@@ -4,6 +4,8 @@ import com.example.sinamekihunter.Controllers.ControllersParent;
 import com.example.sinamekihunter.Controllers.TargetInitController;
 import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Managers.StageManager;
+import com.example.sinamekihunter.Models.RequestModel;
+import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,10 @@ public class SinamekiApplication extends Application {
         stage.setScene(scene);
         stage.show();
         init_values(stage,scene,fxmlLoader.getController());
+        RequestModel requestModel = new RequestModel("https://www.google.com.tr/?hl=tr");
+        requestModel.addHeader("Test","Test");
+        requestModel.addHeader("Deneme","Merhaba");
+        NetworkFunctions.sendRequest(requestModel);
     }
 
     public static void main(String[] args) {

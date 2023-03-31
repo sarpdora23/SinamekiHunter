@@ -1,6 +1,7 @@
 package com.example.sinamekihunter.Controllers;
 
 import com.example.sinamekihunter.Managers.ControllersManager;
+import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.TargetModel;
 import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.StringValues;
@@ -9,9 +10,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -21,6 +24,7 @@ public class MainDashboardController implements ControllersParent{
     public Label targetDomainLabel;
     @FXML
     public TabPane domainsTabPane;
+
 
     @FXML
     protected void createAddSubdomainTab(){
@@ -55,8 +59,18 @@ public class MainDashboardController implements ControllersParent{
             }
         });
     }
-
-    protected void onChangeActiveTab(){
-
+    @FXML
+    protected void onSelectSubdomainDiscovery() throws IOException {
+        Stage subdomain_discovery_stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.DISCOVERY_SUBDOMAIN_VIEW_FXML));
+        Scene subdomain_discovery_scene = new Scene(fxmlLoader.load());
+        DiscoverySubdomainViewController discovery_subdomain_controller = fxmlLoader.getController();
+        subdomain_discovery_stage.setTitle(StringValues.ApplicationValues.MAIN_WINDOW_TITLE);
+        subdomain_discovery_stage.setScene(subdomain_discovery_scene);
+        StageManager.getInstance().createStage(StringValues.StageNames.DISCOVERY_SUBDOMAIN_STAGE,subdomain_discovery_stage,StringValues.SceneNames.DISCOVERY_SUBDOMAIN,discovery_subdomain_controller);
+        subdomain_discovery_stage.setOnCloseRequest(event -> {
+            StageManager.getInstance().closeStage(StringValues.StageNames.DISCOVERY_SUBDOMAIN_STAGE);
+        });
+        subdomain_discovery_stage.show();
     }
 }

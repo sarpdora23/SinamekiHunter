@@ -1,9 +1,11 @@
 package com.example.sinamekihunter.Models;
 
+import org.apache.http.HttpHeaders;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RequestModel {
+public class RequestModel extends Thread {
     private HashMap<String,Object> header_data = new HashMap<>();
     private HashMap<String,Object> body_data = new HashMap<>();
     private HashMap<String,Object> json_data = new HashMap<>();
@@ -25,7 +27,20 @@ public class RequestModel {
         return this.json_data;
     }
     public String getUrl(){return this.url;}
-    public void addHeader(String key,Object value){
+
+    public void setBodyData(HashMap<String, Object> body_data) {
+        this.body_data = body_data;
+    }
+
+    public void setHeaderData(HashMap<String, Object> header_data) {
+        this.header_data = header_data;
+    }
+
+    public void setJsonData(HashMap<String, Object> json_data) {
+        this.json_data = json_data;
+    }
+
+    public void addHeader(String key, Object value){
         this.header_data.put(key,value);
     }
     public void addBody(String key,Object value){
@@ -41,5 +56,9 @@ public class RequestModel {
     @Override
     public String toString(){
         return this.url + ":" + this.responseModel.getStatusCode();
+    }
+    @Override
+    public void run(){
+        System.out.println(header_data.get(HttpHeaders.HOST));
     }
 }

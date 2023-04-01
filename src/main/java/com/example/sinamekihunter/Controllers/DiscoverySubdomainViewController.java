@@ -1,5 +1,6 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Discovery.SubdomainDiscovery;
 import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.TargetModel;
 import com.example.sinamekihunter.Utils.StringValues;
@@ -14,8 +15,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import org.apache.http.HttpHeaders;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class DiscoverySubdomainViewController implements ControllersParent{
     @FXML
@@ -29,6 +32,7 @@ public class DiscoverySubdomainViewController implements ControllersParent{
     @FXML
     private Label filePathLabel;
     private int speedValue;
+    private File wordlist;
     @Override
     public void InitController() {
         fileChooseButton.setText("");
@@ -50,7 +54,13 @@ public class DiscoverySubdomainViewController implements ControllersParent{
 
     @FXML
     protected void onStartDiscoverySubdomain(){
-
+        String url = TargetModel.getInstance().getPureDomain();
+        SubdomainDiscovery subdomainDiscovery = new SubdomainDiscovery(this.wordlist,this.speedValue);
+        HashMap header_data = new HashMap<>();
+        HashMap body_data = new HashMap<>();
+        HashMap json_data = new HashMap<>();
+        header_data.put(HttpHeaders.HOST,"FUZZ");
+        subdomainDiscovery.startDiscovery(url,header_data,body_data,json_data);
     }
     @FXML
     protected void onSelectWordlist(){
@@ -58,6 +68,7 @@ public class DiscoverySubdomainViewController implements ControllersParent{
         File wordlist_file = fileChooser.showOpenDialog(StageManager.getInstance().getStage(StringValues.StageNames.DISCOVERY_SUBDOMAIN_STAGE));
         if (wordlist_file != null){
             filePathLabel.setText(wordlist_file.getPath());
+            this.wordlist = wordlist_file;
         }
     }
 }

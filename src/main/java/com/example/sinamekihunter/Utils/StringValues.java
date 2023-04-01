@@ -24,5 +24,7 @@ public class StringValues {
     public class NetworkValues{
         public static final String REQUEST_TYPE_GET = "GET";
         public static final String REQUEST_TYPE_POST = "POST";
+        public static final String FUZZ_PARAM_VALUE = "FUZZ";
+        public static final String SUBDOMAIN_DISCOVERY_NAME = "Subdomain";
     }
 }

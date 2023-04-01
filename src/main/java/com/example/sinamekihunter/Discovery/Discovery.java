@@ -14,9 +14,13 @@ public abstract class Discovery {
         this.threadSpeed = threadSpeed;
         targetModel = TargetModel.getInstance();
     }
-    public void startDiscovery(){
-
+    public int getThreadSpeed(){
+        return this.threadSpeed;
     }
+    public File getWordlist(){
+        return this.wordlist;
+    }
+
     public void stopDiscovery(){
 
     }

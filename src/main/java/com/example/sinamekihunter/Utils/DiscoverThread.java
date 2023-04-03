@@ -35,7 +35,7 @@ public class DiscoverThread extends Thread{
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Fuzzing thread stopped!");
         }
         requestManager.addThread(newThread,threadName);
     }

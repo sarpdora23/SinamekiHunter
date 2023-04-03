@@ -19,6 +19,7 @@ import org.apache.http.HttpHeaders;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class DiscoverySubdomainViewController implements ControllersParent{
@@ -54,7 +55,7 @@ public class DiscoverySubdomainViewController implements ControllersParent{
     }
 
     @FXML
-    protected void onStartDiscoverySubdomain() throws FileNotFoundException, InterruptedException {
+    protected void onStartDiscoverySubdomain() throws IOException, InterruptedException {
         String url = TargetModel.getInstance().getPureDomain();
         SubdomainDiscovery subdomainDiscovery = new SubdomainDiscovery(this.wordlist,this.speedValue);
         HashMap header_data = new HashMap<>();

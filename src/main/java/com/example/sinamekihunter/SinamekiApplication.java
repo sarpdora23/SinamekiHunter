@@ -28,10 +28,6 @@ public class SinamekiApplication extends Application {
         stage.setScene(scene);
         stage.show();
         init_values(stage,scene,fxmlLoader.getController());
-        RequestModel requestModel = new RequestModel("https://www.google.com.tr/?hl=tr");
-        requestModel.addHeader("Test","Test");
-        requestModel.addHeader("Deneme","Merhaba");
-        //NetworkFunctions.sendRequest(requestModel);
         //test(stage,10);
     }
 

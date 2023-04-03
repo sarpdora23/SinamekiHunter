@@ -2,6 +2,7 @@ package com.example.sinamekihunter.Managers;
 
 import com.example.sinamekihunter.Models.RequestThreadModel;
 import com.example.sinamekihunter.Models.TargetModel;
+import com.example.sinamekihunter.Utils.DiscoverThread;
 import javafx.application.Platform;
 
 import java.io.File;
@@ -17,7 +18,7 @@ public class RequestManager {
     public static RequestManager getInstance(){
         return instance;
     }
-    private void addThread(RequestThreadModel newThread,String threadName){
+    public void addThread(RequestThreadModel newThread,String threadName){
         runningThreads.put(threadName,newThread);
     }
     public RequestThreadModel getThread(String threadName){
@@ -26,20 +27,10 @@ public class RequestManager {
     public void removeThread(String threadName){
         runningThreads.remove(threadName);
     }
-    public void startThread(String url,String threadName, File wordlist,int threadSpeed,String threadMethod,HashMap headerData,HashMap bodyData,HashMap jsonData,String fuzzParam){
+    public void startThread(String url,String threadName, File wordlist,int threadSpeed,String threadMethod,HashMap headerData,HashMap bodyData,HashMap jsonData,String fuzzParam) throws FileNotFoundException, InterruptedException {
         RequestThreadModel newThread = new RequestThreadModel(threadName,wordlist,threadSpeed,threadMethod);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    newThread.startThread(url,headerData,bodyData,jsonData,fuzzParam);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        addThread(newThread,threadName);
+        DiscoverThread test = new DiscoverThread(newThread,this,url,headerData,bodyData,jsonData,fuzzParam,threadName);
+        test.start();
     }
 }
+

@@ -60,7 +60,6 @@ public class RequestThreadModel {
             ArrayList<Thread> threads = new ArrayList<>();
             while (scanner.hasNext() && counter < threadSpeed) {
                 String word = scanner.nextLine();
-                System.out.println(word);
 
                 HashMap headerDataCopy = (HashMap) headerData.clone();
                 HashMap bodyDataCopy = (HashMap) bodyData.clone();
@@ -77,28 +76,24 @@ public class RequestThreadModel {
                         requestModel.getHeaderData().put(fuzzParam, word);
                         break;
                     case "BODY":
-                        requestModel.getBodyData().replace(fuzzParam, word);
+                        requestModel.getBodyData().put(fuzzParam, word);
                         break;
                     case "JSON":
-                        requestModel.getJsonData().replace(fuzzParam, word);
+                        requestModel.getJsonData().put(fuzzParam, word);
                         break;
                     default:
                         break;
                 }
-                Thread thread = new Thread(() -> requestModel.start());
+                Thread thread = new Thread(() -> {
+                    requestModel.start();
+                });
                 threads.add(thread);
                 counter++;
             }
-
             for (Thread thread : threads) {
                 thread.start();
             }
-
-            for (Thread thread : threads) {
-                thread.join();
-            }
-
-            Thread.sleep(2000);
+            Thread.sleep(400);
         }
     }
 }

@@ -4,8 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.Pane?>
 
 <Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.DiscoveryResultController">
@@ -16,14 +15,8 @@
         <Button fx:id="discovery_stop_button" layoutX="525.0" layoutY="6.0" mnemonicParsing="false" onAction="#stopDiscovery" prefHeight="50.0" prefWidth="53.0" text="Stop" />
         <ProgressBar fx:id="discovery_progressbar" layoutX="8.0" layoutY="339.0" prefHeight="18.0" prefWidth="585.0" progress="0.0" />
         <Label fx:id="discovery_progress_label" layoutX="256.0" layoutY="312.0" text="Progress Bar" />
-        <ScrollPane layoutX="21.0" layoutY="70.0" prefHeight="200.0" prefWidth="571.0">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="556.0">
-                    <children>
-                        <ListView fx:id="discovery_result_listview" prefHeight="200.0" prefWidth="558.0" />
-                    </children>
-                </AnchorPane>
-            </content>
-        </ScrollPane>
+      <ListView fx:id="discovery_result_listview" layoutX="14.0" layoutY="69.0" prefHeight="236.0" prefWidth="576.0" />
+      <ToggleButton fx:id="orderButton" layoutX="14.0" layoutY="44.0" mnemonicParsing="false" text="Order Status Code" />
+      <ToggleButton fx:id="orderMinMax" layoutX="128.0" layoutY="44.0" mnemonicParsing="false" text="Order Min-Max" />
     </children>
 </Pane>

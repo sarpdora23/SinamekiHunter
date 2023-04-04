@@ -34,30 +34,33 @@ public class RequestThreadModel {
     public int getCompletedRequestCounter(){
         return completedRequest.size();
     }
+    public ArrayList getCompleteRequests(){
+        return this.getCompleteRequests();
+    }
     public String getThreadName(){
         return this.threadName;
     }
     public File getWordlist(){
         return this.wordlist;
     }
-    public void startThread(String url, HashMap headerData,HashMap bodyData,HashMap jsonData,String fuzzParam) throws FileNotFoundException, InterruptedException {
+    public void startThread(String url, HashMap headerData,HashMap bodyData,HashMap jsonData,String fuzzParam,String requestMethod) throws FileNotFoundException, InterruptedException {
         String fuzzParamType = "";
         for (Object header : headerData.keySet()) {
-            if (headerData.get(header) == StringValues.NetworkValues.FUZZ_PARAM_VALUE) {
+            if (headerData.get(header).toString().indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE) != -1) {
                 fuzzParamType = "HEADER";
                 fuzzParam = (String) header;
                 break;
             }
         }
         for (Object body : bodyData.keySet()) {
-            if (bodyData.get(body) == StringValues.NetworkValues.FUZZ_PARAM_VALUE) {
+            if (bodyData.get(body).toString().indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE) != -1) {
                 fuzzParamType = "BODY";
                 fuzzParam = (String) body;
                 break;
             }
         }
         for (Object json : jsonData.keySet()) {
-            if (jsonData.get(json) == StringValues.NetworkValues.FUZZ_PARAM_VALUE) {
+            if (jsonData.get(json).toString().indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE) != -1) {
                 fuzzParamType = "JSON";
                 fuzzParam = (String) json;
                 break;
@@ -74,7 +77,7 @@ public class RequestThreadModel {
                 HashMap bodyDataCopy = (HashMap) bodyData.clone();
                 HashMap jsonDataCopy = (HashMap) bodyData.clone();
 
-                RequestModel requestModel = new RequestModel(url,this,word);
+                RequestModel requestModel = new RequestModel(url,this,word,requestMethod);
                 requestModel.setRequestMethod(this.threadMethod);
                 requestModel.setHeaderData(headerDataCopy);
                 requestModel.setBodyData(bodyDataCopy);
@@ -82,27 +85,34 @@ public class RequestThreadModel {
 
                 switch (fuzzParamType) {
                     case "HEADER":
-                        requestModel.getHeaderData().put(fuzzParam, word);
+                        String value = (String) requestModel.getHeaderData().get(fuzzParam);
+                        int replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
+                        value = word + value.substring(replaceIndex + 4);
+                        requestModel.getHeaderData().put(fuzzParam, value);
                         break;
                     case "BODY":
-                        requestModel.getBodyData().put(fuzzParam, word);
+                        value = (String) requestModel.getBodyData().get(fuzzParam);
+                        replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
+                        value = word + value.substring(replaceIndex + 4);
+                        requestModel.getBodyData().put(fuzzParam, value);
                         break;
                     case "JSON":
-                        requestModel.getJsonData().put(fuzzParam, word);
+                        value = (String) requestModel.getJsonData().get(fuzzParam);
+                        replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
+                        value = word + value.substring(replaceIndex + 4);
+                        requestModel.getJsonData().put(fuzzParam, value);
                         break;
                     default:
                         break;
                 }
-                Thread thread = new Thread(() -> {
-                    requestModel.start();
-                });
+                Thread thread = new Thread(requestModel::start);
                 threads.add(thread);
                 counter++;
             }
             for (Thread thread : threads) {
                 thread.start();
             }
-            Thread.sleep(400);
+            Thread.sleep(100);
         }
     }
 }

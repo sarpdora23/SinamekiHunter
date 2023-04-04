@@ -37,7 +37,7 @@ public class RequestManager {
     public void startThread(String url,String threadName, File wordlist,int threadSpeed,String threadMethod,HashMap headerData,HashMap bodyData,HashMap jsonData,String fuzzParam) throws IOException, InterruptedException {
         RequestThreadModel newThread = new RequestThreadModel(threadName,wordlist,threadSpeed,threadMethod);
         Stage resultStage = new Stage();
-        DiscoverThread discoverThread = new DiscoverThread(newThread,this,url,headerData,bodyData,jsonData,fuzzParam,threadName);
+        DiscoverThread discoverThread = new DiscoverThread(newThread,this,url,headerData,bodyData,jsonData,fuzzParam,threadName,threadMethod);
         FXMLLoader resultViewFXML = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.DISCOVERY_RESULT_VIEW_FXML));
         Scene resultViewScene = new Scene(resultViewFXML.load());
         resultStage.setScene(resultViewScene);

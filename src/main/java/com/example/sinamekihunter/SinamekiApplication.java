@@ -28,7 +28,7 @@ public class SinamekiApplication extends Application {
         stage.setScene(scene);
         stage.show();
         init_values(stage,scene,fxmlLoader.getController());
-        //test(stage,10);
+        test();
     }
 
     public static void main(String[] args) {
@@ -38,34 +38,12 @@ public class SinamekiApplication extends Application {
         StageManager.createInstance(first_stage,StringValues.StageNames.TARGET_INIT_STAGE);
         ControllersManager.createInstance(first_controller,first_scene,StringValues.SceneNames.TARGET_INIT_SCENE);
     }
-    private void test(Stage stage,int a) throws FileNotFoundException, InterruptedException {
-        FileChooser fileChooser = new FileChooser();
-        File wordlist_file = fileChooser.showOpenDialog(stage);
-        if (wordlist_file != null){
-            Scanner scanner = new Scanner(wordlist_file);
-            while (scanner.hasNext()){
-                int counter = 0;
-                ArrayList<String> words = new ArrayList<>();
-                while (scanner.hasNext() && counter < a){
-                    words.add(scanner.nextLine());
-                    counter++;
-                }
-                for (String word: words) {
-                    Test test = new Test(word);
-                    test.start();
-                }
-                Thread.sleep(2000);
-            }
+    private void test(){
+        String test = "FUZZ.test.com";
+        if (test.indexOf("FUZZ") != -1){
+            int replaceIndex = test.indexOf("FUZZ");
+            test = "ARABAM" + test.substring(replaceIndex + 4);
         }
-    }
-}
-class Test extends Thread{
-    private String word;
-    public Test(String word){
-        this.word = word;
-    }
-    @Override
-    public void run(){
-        System.out.println(word);
+        System.out.println(test);
     }
 }

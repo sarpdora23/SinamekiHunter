@@ -56,12 +56,13 @@ public class DiscoverySubdomainViewController implements ControllersParent{
 
     @FXML
     protected void onStartDiscoverySubdomain() throws IOException, InterruptedException {
-        String url = TargetModel.getInstance().getPureDomain();
+        String url =  TargetModel.getInstance().getProtocol() + "://"+TargetModel.getInstance().getPureDomain();
+        System.out.println("URL: " + url);
         SubdomainDiscovery subdomainDiscovery = new SubdomainDiscovery(this.wordlist,this.speedValue);
         HashMap header_data = new HashMap<>();
         HashMap body_data = new HashMap<>();
         HashMap json_data = new HashMap<>();
-        header_data.put(HttpHeaders.HOST,"FUZZ");
+        header_data.put(HttpHeaders.HOST,"FUZZ."+TargetModel.getInstance().getPureDomain());
         subdomainDiscovery.startDiscovery(url,header_data,body_data,json_data);
     }
     @FXML

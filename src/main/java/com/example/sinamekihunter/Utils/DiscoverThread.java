@@ -15,10 +15,11 @@ public class DiscoverThread extends Thread{
     HashMap jsonData;
     String fuzzParam;
     String threadName;
+    String requestMethod;
     public DiscoverThread(RequestThreadModel newThread,RequestManager requestManager,
                           String url,HashMap headerData,
                           HashMap bodyData,HashMap jsonData,
-                          String fuzzParam,String threadName){
+                          String fuzzParam,String threadName,String requestMethod){
         this.newThread = newThread;
         this.requestManager = requestManager;
         this.url=url;
@@ -27,11 +28,12 @@ public class DiscoverThread extends Thread{
         this.jsonData = jsonData;
         this.fuzzParam = fuzzParam;
         this.threadName = threadName;
+        this.requestMethod = requestMethod;
     }
     @Override
     public void run(){
         try {
-            newThread.startThread(url,headerData,bodyData,jsonData,fuzzParam);
+            newThread.startThread(url,headerData,bodyData,jsonData,fuzzParam,requestMethod);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

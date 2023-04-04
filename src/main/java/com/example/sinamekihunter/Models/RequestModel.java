@@ -2,9 +2,11 @@ package com.example.sinamekihunter.Models;
 
 import com.example.sinamekihunter.Controllers.DiscoveryResultController;
 import com.example.sinamekihunter.Managers.ControllersManager;
+import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
 import org.apache.http.HttpHeaders;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,10 +21,11 @@ public class RequestModel extends Thread {
     public ResponseModel responseModel;
     private String request_method;
 
-    public RequestModel(String url,RequestThreadModel requestThreadModel,String word){
+    public RequestModel(String url,RequestThreadModel requestThreadModel,String word,String request_method){
         this.url = url;
         this.requestThreadModel = requestThreadModel;
         this.word = word;
+        this.request_method = request_method;
     }
     public HashMap getHeaderData(){
         return this.header_data;
@@ -34,6 +37,10 @@ public class RequestModel extends Thread {
         return this.json_data;
     }
     public String getUrl(){return this.url;}
+    public ResponseModel getResponse(){
+        return this.responseModel;
+    }
+    public String getRequest_method(){return this.request_method;}
 
     public void setBodyData(HashMap<String, Object> body_data) {
         this.body_data = body_data;
@@ -45,6 +52,11 @@ public class RequestModel extends Thread {
 
     public void setJsonData(HashMap<String, Object> json_data) {
         this.json_data = json_data;
+    }
+    public void setResponse(ResponseModel responseModel){
+        this.responseModel = responseModel;
+        DiscoveryResultController resultController = (DiscoveryResultController) ControllersManager.getInstance().getController(StringValues.SceneNames.DISCOVERY_RESULT_SCENE);
+        resultController.updateRequest(this);
     }
 
     public void addHeader(String key, Object value){
@@ -68,8 +80,11 @@ public class RequestModel extends Thread {
     }
     @Override
     public void run(){
-        System.out.println(header_data.get(HttpHeaders.HOST));
-        DiscoveryResultController resultController = (DiscoveryResultController) ControllersManager.getInstance().getController(StringValues.SceneNames.DISCOVERY_RESULT_SCENE);
-        resultController.updateRequest(this);
+        try {
+            System.out.println("Header Host:" + header_data.get(HttpHeaders.HOST));
+            NetworkFunctions.sendRequest(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

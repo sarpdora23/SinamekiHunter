@@ -1,12 +1,19 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.RequestThreadModel;
 import com.example.sinamekihunter.Models.ResponseModel;
+import com.example.sinamekihunter.Models.TargetModel;
+import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.DiscoverThread;
+import com.example.sinamekihunter.Utils.StringValues;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,9 +21,11 @@ import javafx.scene.control.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 public class DiscoveryResultController implements ControllersParent {
     private DiscoverThread discoverThread;
@@ -29,6 +38,8 @@ public class DiscoveryResultController implements ControllersParent {
     @FXML
     private Label discovery_progress_label;
     private ObservableList<ResponseModel> responseModels;
+    private ArrayList<ResponseModel> displayResponseModelList;
+    private ObservableList<Integer> statusCodesList;
     @FXML
     private Button discovery_stop_button;
     @FXML
@@ -39,7 +50,10 @@ public class DiscoveryResultController implements ControllersParent {
     private ToggleButton orderButton;
     @FXML
     private ToggleButton orderMinMax;
-
+    @FXML
+    private ChoiceBox statusCodeFilterChoiceBox;
+    private boolean isFiltered = false;
+    private int filteredValue;
 
     @Override
     public void InitController() {
@@ -49,12 +63,24 @@ public class DiscoveryResultController implements ControllersParent {
         discovery_progress_label.setText("0/"+totalWordCount);
         discoverThread.start();
         responseModels = FXCollections.observableArrayList();
+        statusCodesList = FXCollections.observableArrayList();
+        displayResponseModelList = new ArrayList<>();
+        statusCodeFilterChoiceBox.setItems(statusCodesList);
         discovery_result_listview.setItems(responseModels);
         orderButton.selectedProperty().addListener((observableValue,old,newValue)->{
             orderList();
         });
         orderMinMax.selectedProperty().addListener((observableValue,old,newValue)->{
             orderList();
+        });
+        statusCodeFilterChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                System.out.println("Value:" + statusCodesList.get(t1.intValue()));
+                isFiltered = true;
+                filteredValue = statusCodesList.get(t1.intValue());
+                filterList(filteredValue);
+            }
         });
     }
     public void setDiscoverThread(DiscoverThread discoverThread, RequestThreadModel requestThreadModel){
@@ -90,7 +116,18 @@ public class DiscoveryResultController implements ControllersParent {
                 discovery_progressbar.setProgress((double) completedRequest / totalWordCount);
                 discovery_request_label.setText("Current Request: "+requestModel.getWord());
                 if(String.valueOf(responseModel.getStatusCode()).substring(0,1) != "4"){
-                    responseModels.add(responseModel);
+                    displayResponseModelList.add(responseModel);
+                    if (isFiltered){
+                        if (responseModel.getStatusCode() == filteredValue){
+                            responseModels.add(responseModel);
+                        }
+                    }
+                    else{
+                        responseModels.add(responseModel);
+                    }
+                    if (statusCodesList.indexOf(responseModel.getStatusCode()) == -1){
+                        statusCodesList.add(responseModel.getStatusCode());
+                    }
                     orderList();
                 }
 
@@ -118,6 +155,22 @@ public class DiscoveryResultController implements ControllersParent {
             }
         }
         Collections.sort(this.responseModels,comparator);
+    }
+    public void filterList(int statusCode){
+        ArrayList<ResponseModel> filteredResponses = new ArrayList<>();
+        for (ResponseModel response:displayResponseModelList) {
+            if (response.getStatusCode() == statusCode){
+                filteredResponses.add(response);
+            }
+        }
+        responseModels.clear();
+        responseModels.addAll(filteredResponses);
+    }
+    @FXML
+    protected void addSubdomain(){
+        ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
+        String url = selectedResponse.getWord() + "." + TargetModel.getInstance().getPureDomain();
+        AddSubdomainTabController.addSubdomain(url);
     }
 }
 

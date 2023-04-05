@@ -8,6 +8,8 @@ import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
@@ -39,11 +41,6 @@ public class SinamekiApplication extends Application {
         ControllersManager.createInstance(first_controller,first_scene,StringValues.SceneNames.TARGET_INIT_SCENE);
     }
     private void test(){
-        String test = "FUZZ.test.com";
-        if (test.indexOf("FUZZ") != -1){
-            int replaceIndex = test.indexOf("FUZZ");
-            test = "ARABAM" + test.substring(replaceIndex + 4);
-        }
-        System.out.println(test);
+
     }
 }

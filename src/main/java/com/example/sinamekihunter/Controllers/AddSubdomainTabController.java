@@ -23,12 +23,17 @@ public class AddSubdomainTabController implements ControllersParent{
     }
     @FXML
     public void onAddButtonClick(){
-        String url = newDomainTextField.getText();
-        DomainModel domainModel = new DomainModel(url);
-        tabPane.getTabs().get(tabPane.getTabs().size() - 1).setText(domainModel.getDomainUrl());
-        MainDashboardController mainDashboardController = (MainDashboardController) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
-        mainDashboardController.createAddSubdomainTab();
+        String url = newDomainTextField.getText() + "." + TargetModel.getInstance().getPureDomain();
+        addSubdomain(url);
         tabPane.getSelectionModel().getSelectedItem().setContent(new Pane());
         tabPane.getSelectionModel().selectLast();
+    }
+    public static void addSubdomain(String url){
+        DomainModel domainModel = new DomainModel(url);
+        MainDashboardController mainDashboardController = (MainDashboardController) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        TabPane tabPane = mainDashboardController.domainsTabPane;
+        tabPane.getTabs().get(tabPane.getTabs().size() - 1).setText(domainModel.getDomainUrl());
+        mainDashboardController.createAddSubdomainTab();
+
     }
 }

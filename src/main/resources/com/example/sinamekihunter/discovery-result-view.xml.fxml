@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.Pane?>
@@ -15,8 +18,17 @@
         <Button fx:id="discovery_stop_button" layoutX="525.0" layoutY="6.0" mnemonicParsing="false" onAction="#stopDiscovery" prefHeight="50.0" prefWidth="53.0" text="Stop" />
         <ProgressBar fx:id="discovery_progressbar" layoutX="8.0" layoutY="339.0" prefHeight="18.0" prefWidth="585.0" progress="0.0" />
         <Label fx:id="discovery_progress_label" layoutX="256.0" layoutY="312.0" text="Progress Bar" />
-      <ListView fx:id="discovery_result_listview" layoutX="14.0" layoutY="69.0" prefHeight="236.0" prefWidth="576.0" />
+      <ListView fx:id="discovery_result_listview" layoutX="14.0" layoutY="69.0" prefHeight="236.0" prefWidth="576.0">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#addSubdomain" text="Add Subdomain" />
+              </items>
+            </ContextMenu>
+         </contextMenu></ListView>
       <ToggleButton fx:id="orderButton" layoutX="14.0" layoutY="44.0" mnemonicParsing="false" text="Order Status Code" />
       <ToggleButton fx:id="orderMinMax" layoutX="128.0" layoutY="44.0" mnemonicParsing="false" text="Order Min-Max" />
+      <Label layoutX="252.0" layoutY="48.0" text="Status Code Filter:" />
+      <ChoiceBox fx:id="statusCodeFilterChoiceBox" layoutX="358.0" layoutY="44.0" prefHeight="25.0" prefWidth="98.0" />
     </children>
 </Pane>

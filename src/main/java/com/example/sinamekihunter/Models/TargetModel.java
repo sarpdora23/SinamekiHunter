@@ -9,13 +9,23 @@ public class TargetModel {
     private static TargetModel targetInstance;
     private String pure_domain;
     private String protocol;
+    private boolean hasError = false;
     private TargetModel(String url){
-        this.protocol = URLParseFunctions.getProtocol(url);
-        String domain = URLParseFunctions.getDomainHost(url);
-        all_domains = new ArrayList<>();
-        DomainModel domainModel = new DomainModel(domain);
-        all_domains.add(domainModel);
-        pure_domain = URLParseFunctions.getPureDomain(domain);
+        if (url.indexOf("http://") != 0 && url.indexOf("https://") != 0){
+            hasError = true;
+        }
+        else{
+            hasError = false;
+            this.protocol = URLParseFunctions.getProtocol(url);
+            String domain = URLParseFunctions.getDomainHost(url);
+            all_domains = new ArrayList<>();
+            DomainModel domainModel = new DomainModel(domain);
+            all_domains.add(domainModel);
+            pure_domain = URLParseFunctions.getPureDomain(domain);
+        }
+    }
+    public boolean getHasError(){
+        return hasError;
     }
     public static void createInstance(String url){
         targetInstance = new TargetModel(url);

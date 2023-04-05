@@ -30,4 +30,7 @@ public class ResponseModel {
         return message;
     }
     public long getContentLength(){return this.contentLength;}
+    public String getWord(){
+        return this.word;
+    }
 }

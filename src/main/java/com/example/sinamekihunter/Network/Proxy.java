@@ -24,4 +24,5 @@ public class Proxy {
     public static Proxy getInstance(){
         return proxyInstance;
     }
+
 }

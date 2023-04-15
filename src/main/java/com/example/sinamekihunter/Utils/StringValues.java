@@ -29,5 +29,7 @@ public class StringValues {
         public static final String REQUEST_TYPE_POST = "POST";
         public static final String FUZZ_PARAM_VALUE = "FUZZ";
         public static final String SUBDOMAIN_DISCOVERY_NAME = "Subdomain";
+        public static final String REQUEST_TYPE_DISCOVERY = "Discovery";
+        public static final String REQUEST_TYPE_PROXY = "Proxy";
     }
 }

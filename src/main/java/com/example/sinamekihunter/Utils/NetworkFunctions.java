@@ -38,12 +38,12 @@ public class NetworkFunctions {
                 HttpEntity entity = response.getEntity();
                 int statusCode = response.getStatusLine().getStatusCode();
                 ResponseModel responseModel = new ResponseModel(requestModel.getWord(),statusCode,HttpStatusReasons.getReasonForStatus(statusCode),EntityUtils.toString(entity));
-                requestModel.setResponse(responseModel,requestModel.IsDiscovery());
+                requestModel.setResponse(responseModel);
+
             }catch (Exception e){
                 throw e;
             }
         }
-        System.out.println("Debug Flag");
         if (requestModel.getRequest_method() == StringValues.NetworkValues.REQUEST_TYPE_POST){
 
             try{
@@ -71,7 +71,7 @@ public class NetworkFunctions {
                 HttpEntity entity = response.getEntity();
                 int statusCode = response.getStatusLine().getStatusCode();
                 ResponseModel responseModel = new ResponseModel(requestModel.getWord(),statusCode,HttpStatusReasons.getReasonForStatus(statusCode),EntityUtils.toString(entity));
-                requestModel.setResponse(responseModel,requestModel.IsDiscovery());
+                requestModel.setResponse(responseModel);
             }catch (Exception e){
                 throw e;
             }
@@ -87,7 +87,7 @@ public class NetworkFunctions {
         }
         return result.toString("UTF-8");
     }
-    public static RequestModel stringToRequestModel(String requestString){
+    public static RequestModel stringToRequestModel(String requestString,OutputStream outputStream){
         HashMap bodyParams = new HashMap<>();
         HashMap headerParams = new HashMap<>();
         HashMap jsonParams = new HashMap<>();
@@ -131,7 +131,7 @@ public class NetworkFunctions {
                 isJson = true;
             }
         }
-        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,bodyParams,isJson,jsonParams,requestString);
+        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,bodyParams,isJson,jsonParams,requestString,outputStream);
         return createdRequestModel;
     }
 }

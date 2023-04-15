@@ -1,5 +1,7 @@
 package com.example.sinamekihunter.Network;
 
+import com.example.sinamekihunter.Models.RequestModel;
+import com.example.sinamekihunter.Models.SocketModel;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 
 import java.io.IOException;
@@ -20,22 +22,32 @@ public class ProxyThread extends Thread{
                 Socket socket = serverSocket.accept();
                 System.out.println("Request is here!!!!");
                 InputStream inputStream  = socket.getInputStream();
-                String request = NetworkFunctions.inputStreamToString(inputStream);
-                System.out.println(request);
-                NetworkFunctions.stringToRequestModel(request);
                 OutputStream outputStream = socket.getOutputStream();
-                String htmlTest = "<html><body><h1>Test Success</h1></body></html>";
-                final String CRLF = "\n\r";
-                String response = "HTTP/1.1 200 OK"+CRLF+
-                        "Content-Length: " + htmlTest.getBytes().length + CRLF+
-                        CRLF+
-                        htmlTest+
-                        CRLF+CRLF;
-                outputStream.write(response.getBytes());
-                inputStream.close();
-                outputStream.close();
-                socket.close();
+                SocketModel socketModel = new SocketModel(socket,outputStream,inputStream);
+                String request = NetworkFunctions.inputStreamToString(inputStream);
+                if(request.equals("")){
+                    System.out.println("NULL");
+                    socketModel.finishedRequest();
+                }
+                else{
+                    System.out.println(request);
+                    RequestModel requestModel = NetworkFunctions.stringToRequestModel(request,outputStream);
+                    requestModel.setSocketModel(socketModel);
+                    NetworkFunctions.sendRequest(requestModel);
+                    String htmlTest = "<html><body><h1>Test Success</h1></body></html>";
+                    final String CRLF = "\n\r";
+                    String response = "HTTP/1.1 200 OK"+CRLF+
+                            "Content-Length: " + htmlTest.getBytes().length + CRLF+
+                            CRLF+
+                            htmlTest+
+                            CRLF+CRLF;
+                }
+
+                //inputStream.close();
+                //outputStream.close();
+                //socket.close();
             }
+
             this.serverSocket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

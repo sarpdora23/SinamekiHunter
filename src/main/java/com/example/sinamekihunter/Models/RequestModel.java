@@ -7,8 +7,12 @@ import com.example.sinamekihunter.Utils.StringValues;
 import org.apache.http.HttpHeaders;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class RequestModel extends Thread {
     private RequestThreadModel requestThreadModel;
@@ -21,28 +25,31 @@ public class RequestModel extends Thread {
     public boolean isJsonData = false;
     public ResponseModel responseModel;
     private String request_method;
-    private Boolean isDiscovery = true;
+    private String request_type;
+    private OutputStream outputStream;
+    private SocketModel socketModel;
 
     public RequestModel(String url,RequestThreadModel requestThreadModel,String word,String request_method){
         this.url = url;
         this.requestThreadModel = requestThreadModel;
         this.word = word;
         this.request_method = request_method;
-        this.isDiscovery = true;
+        this.request_type = StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY;
     }
-    public RequestModel(String url,String request_method,HashMap header_data,HashMap body_data,Boolean isJsonData,HashMap json_data,String request_text){
+    public RequestModel(String url,String request_method,HashMap header_data,HashMap body_data,Boolean isJsonData,HashMap json_data,String request_text,OutputStream outputStream){
         this.url = url;
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
             this.url = "http://"+header_data.get("Host")+url;
             System.out.println("URL:"+this.url);
         }
+        this.outputStream = outputStream;
         this.request_method = request_method;
         this.header_data = header_data;
         this.body_data = body_data;
         this.isJsonData = isJsonData;
         this.request_text = request_text;
-        this.isDiscovery = false;
+        this.request_type = StringValues.NetworkValues.REQUEST_TYPE_PROXY;
         if (isJsonData){
             this.json_data = json_data;
         }
@@ -61,7 +68,10 @@ public class RequestModel extends Thread {
         return this.responseModel;
     }
     public String getRequest_method(){return this.request_method;}
-    public Boolean IsDiscovery(){return this.isDiscovery;}
+    public String getRequestType(){return this.request_type;}
+    public String getRequestText(){return this.request_text;}
+    public OutputStream getOutputStream(){return this.outputStream;}
+    public SocketModel getSocketModel(){return this.socketModel;}
     public void setBodyData(HashMap<String, Object> body_data) {
         this.body_data = body_data;
     }
@@ -73,15 +83,24 @@ public class RequestModel extends Thread {
     public void setJsonData(HashMap<String, Object> json_data) {
         this.json_data = json_data;
     }
-    public void setResponse(ResponseModel responseModel,Boolean isDiscovery){
+    public void setResponse(ResponseModel responseModel) throws IOException {
+
         this.responseModel = responseModel;
-        if(isDiscovery){
+        if(this.request_type == StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY){
             DiscoveryResultController resultController = (DiscoveryResultController) ControllersManager.getInstance().getController(StringValues.SceneNames.DISCOVERY_RESULT_SCENE);
             resultController.updateRequest(this);
         }
+        else if (Objects.equals(this.request_type, StringValues.NetworkValues.REQUEST_TYPE_PROXY)){
+            System.out.println(this.responseModel.getContent());
+            String a = responseModel.getContent() + "\r\n\r\n";
+            this.getOutputStream().write(a.getBytes());
+            this.getSocketModel().finishedRequest();
+        }
         System.out.println(this);
     }
-
+    public void setSocketModel(SocketModel socketModel){
+        this.socketModel = socketModel;
+    }
     public void addHeader(String key, Object value){
         this.header_data.put(key,value);
     }

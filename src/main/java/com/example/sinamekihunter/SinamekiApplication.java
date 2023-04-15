@@ -31,8 +31,8 @@ public class SinamekiApplication extends Application {
         stage.setScene(scene);
         stage.show();
         init_values(stage,scene,fxmlLoader.getController());
-        test2();
-       // test();
+        //test2();
+        test();
     }
     public static void test2() throws IOException {
         String test = "POST /login HTTP/1.1\r\n" +
@@ -50,8 +50,8 @@ public class SinamekiApplication extends Application {
                 "Upgrade-Insecure-Requests: 1\r\n" +
                 "\r\n" +
                 "login_email=aa%40aa.com&login_password=aaaaaa";
-       RequestModel requestModel = NetworkFunctions.stringToRequestModel(test);
-       NetworkFunctions.sendRequest(requestModel);
+       //RequestModel requestModel = NetworkFunctions.stringToRequestModel(test);
+       //NetworkFunctions.sendRequest(requestModel);
     }
     public static void main(String[] args) {
         launch();

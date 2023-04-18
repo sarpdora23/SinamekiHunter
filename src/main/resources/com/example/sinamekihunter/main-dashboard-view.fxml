@@ -41,6 +41,12 @@
                       <MenuItem mnemonicParsing="false" text="Action 1" />
                     </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Proxy">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#startProxy" text="Proxy Start" />
+                        <MenuItem mnemonicParsing="false" onAction="#stopProxy" text="Proxy Stop" />
+                     </items>
+                  </Menu>
               </menus>
             </MenuBar>
          </children>

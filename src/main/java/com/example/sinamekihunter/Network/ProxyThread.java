@@ -34,23 +34,12 @@ public class ProxyThread extends Thread{
                     RequestModel requestModel = NetworkFunctions.stringToRequestModel(request,outputStream);
                     requestModel.setSocketModel(socketModel);
                     NetworkFunctions.sendRequest(requestModel);
-                    String htmlTest = "<html><body><h1>Test Success</h1></body></html>";
-                    final String CRLF = "\n\r";
-                    String response = "HTTP/1.1 200 OK"+CRLF+
-                            "Content-Length: " + htmlTest.getBytes().length + CRLF+
-                            CRLF+
-                            htmlTest+
-                            CRLF+CRLF;
                 }
 
-                //inputStream.close();
-                //outputStream.close();
-                //socket.close();
             }
 
-            this.serverSocket.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
 }

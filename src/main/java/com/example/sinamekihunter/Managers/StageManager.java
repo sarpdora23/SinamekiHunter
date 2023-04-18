@@ -28,6 +28,7 @@ public class StageManager {
         return active_stages.get(stage_name);
     }
     public void createStage(String stage_name, Stage new_stage,String sceneName,ControllersParent controller){
+
         active_stages.put(stage_name,new_stage);
         ControllersManager.getInstance().addController(new_stage.getScene(),controller,sceneName);
         new_stage.show();

@@ -17,6 +17,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,7 @@ public class NetworkFunctions {
         while (inputStream.available() > 0 && (length = inputStream.read(buffer)) != -1) {
             result.write(buffer, 0, length);
         }
-        return result.toString("UTF-8");
+        return result.toString(StandardCharsets.US_ASCII);
     }
     public static RequestModel stringToRequestModel(String requestString,OutputStream outputStream){
         HashMap bodyParams = new HashMap<>();

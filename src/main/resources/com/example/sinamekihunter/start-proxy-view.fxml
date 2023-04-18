@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="219.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.StartProxyViewController">
+   <children>
+      <Label layoutX="79.0" layoutY="99.0" text="Port:" />
+      <TextField fx:id="port_textfield" layoutX="112.0" layoutY="95.0" prefHeight="25.0" prefWidth="61.0" />
+      <Button fx:id="startButton" layoutX="100.0" layoutY="146.0" mnemonicParsing="false" onAction="#startProxy" text="Start Proxy" />
+      <Label layoutX="86.0" layoutY="31.0" text="Sinameki Proxy">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="result_message_label" layoutX="60.0" layoutY="188.0" />
+   </children>
+</Pane>

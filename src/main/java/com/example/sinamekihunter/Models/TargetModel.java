@@ -2,6 +2,7 @@ package com.example.sinamekihunter.Models;
 
 import com.example.sinamekihunter.Utils.URLParseFunctions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TargetModel {
@@ -19,10 +20,13 @@ public class TargetModel {
             this.protocol = URLParseFunctions.getProtocol(url);
             String domain = URLParseFunctions.getDomainHost(url);
             all_domains = new ArrayList<>();
-            DomainModel domainModel = new DomainModel(domain);
-            all_domains.add(domainModel);
+
             pure_domain = URLParseFunctions.getPureDomain(domain);
         }
+    }
+    public void getReadyToListenTarget(String domain){
+        DomainModel domainModel = new DomainModel(domain,0);
+        all_domains.add(domainModel);
     }
     public boolean getHasError(){
         return hasError;
@@ -45,11 +49,9 @@ public class TargetModel {
     public ArrayList<DomainModel> getDomainList(){
         return this.all_domains;
     }
-    public static DomainModel urlToDomain(String url){
-        String domain = URLParseFunctions.getDomainHost(url);
-        System.out.println("Domain: " + domain);
-        DomainModel domainModel = new DomainModel(domain);
-        TargetModel.getInstance().all_domains.add(domainModel);
-        return domainModel;
+    public void checkProxyRequest(RequestModel requestModel) throws IOException {
+        String url = URLParseFunctions.getDomainHost(requestModel.getUrl());
+        //TODO BURDA BI IF KONTROLU DOMAINMODEL CHECK YAPILSIN
+        all_domains.get(0).addRequestToDomain(requestModel);
     }
 }

@@ -29,9 +29,9 @@ public class AddSubdomainTabController implements ControllersParent{
         tabPane.getSelectionModel().selectLast();
     }
     public static void addSubdomain(String url){
-        DomainModel domainModel = new DomainModel(url);
         MainDashboardController mainDashboardController = (MainDashboardController) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
         TabPane tabPane = mainDashboardController.domainsTabPane;
+        DomainModel domainModel = new DomainModel(url,tabPane.getTabs().size());
         tabPane.getTabs().get(tabPane.getTabs().size() - 1).setText(domainModel.getDomainUrl());
         mainDashboardController.createAddSubdomainTab();
 

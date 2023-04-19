@@ -2,23 +2,26 @@ package com.example.sinamekihunter.Controllers;
 
 import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Managers.StageManager;
+import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.TargetModel;
 import com.example.sinamekihunter.Network.Proxy;
 import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.StringValues;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class MainDashboardController implements ControllersParent{
     private boolean isCreated = false;
@@ -26,6 +29,7 @@ public class MainDashboardController implements ControllersParent{
     public Label targetDomainLabel;
     @FXML
     public TabPane domainsTabPane;
+    private HashMap<Integer, ObservableList> tabRequestsMap;
 
 
     @FXML
@@ -36,10 +40,12 @@ public class MainDashboardController implements ControllersParent{
     }
     @Override
     public void InitController() {
+        tabRequestsMap = new HashMap<>();
         isCreated = true;
         TargetModel target = TargetModel.getInstance();
         targetDomainLabel.setText(target.getPureDomain());
         domainsTabPane.getTabs().get(0).setText(target.getDomainList().get(0).getDomainUrl());
+
         createAddSubdomainTab();
         domainsTabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -60,6 +66,7 @@ public class MainDashboardController implements ControllersParent{
                 }
             }
         });
+
     }
     @FXML
     protected void onSelectSubdomainDiscovery() throws IOException {
@@ -101,5 +108,26 @@ public class MainDashboardController implements ControllersParent{
             }
         }
         alert.show();
+    }
+    public void addRequestToDashboard(RequestModel requestModel,int tab_index) throws IOException {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.REQUEST_ROOT_VIEW_FXML));
+                Parent request_root_view = null;
+                try {
+                    request_root_view = fxmlLoader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                RequestRootViewController requestRootViewController = fxmlLoader.getController();
+                requestRootViewController.setRequestModel(requestModel);
+                AnchorPane anchorPane = (AnchorPane) domainsTabPane.getTabs().get(tab_index).getContent();
+                ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
+                VBox vbox = (VBox) scrollPane.getContent();
+                //vbox.getChildren()
+            }
+        });
+
     }
 }

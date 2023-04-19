@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.RequestRootViewController">
+   <children>
+      <Label fx:id="endpoint_label" layoutX="136.0" layoutY="19.0" text="Endpoint" />
+      <Label fx:id="status_code_label" layoutX="369.0" layoutY="19.0" text="Label" />
+      <Label fx:id="length_label" layoutX="530.0" layoutY="19.0" text="Label" />
+      <Label layoutX="326.0" layoutY="19.0" text="Status:" />
+      <Label layoutX="486.0" layoutY="19.0" text="Length:" />
+      <Label fx:id="request_method_label" layoutX="31.0" layoutY="19.0" text="Method" />
+   </children>
+</Pane>

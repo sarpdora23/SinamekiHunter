@@ -95,6 +95,7 @@ public class RequestModel extends Thread {
             String a = responseModel.getContent() + "\r\n\r\n";
             this.getOutputStream().write(a.getBytes());
             this.getSocketModel().finishedRequest();
+            TargetModel.getInstance().checkProxyRequest(this);
         }
         System.out.println(this);
     }

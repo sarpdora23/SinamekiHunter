@@ -4,14 +4,14 @@ public class ResponseModel {
     private String word;
     private int statusCode;
     private String message;
-    private String content;
+    private byte[] content;
     private int contentLength;
-    public ResponseModel(String word,int statusCode,String message,String content){
+    public ResponseModel(String word,int statusCode,String message,byte[] content){
         this.word = word;
         this.statusCode = statusCode;
         this.message = message;
         this.content = content;
-        this.contentLength = content.length();
+        this.contentLength = new String(content).length();
     }
     public int getStatusCode() {
         return statusCode;
@@ -22,7 +22,11 @@ public class ResponseModel {
         return "Word:" + this.word +"   Status Code:" + this.statusCode + "     Length:" + this.contentLength;
     }
 
-    public String getContent() {
+    public String getContentString() {
+        return new String(content);
+    }
+
+    public byte[] getContent() {
         return content;
     }
 

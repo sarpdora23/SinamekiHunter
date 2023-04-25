@@ -38,7 +38,7 @@ public class NetworkFunctions {
                 CloseableHttpResponse response = client.execute((HttpUriRequest) getRequest);
                 HttpEntity entity = response.getEntity();
                 int statusCode = response.getStatusLine().getStatusCode();
-                ResponseModel responseModel = new ResponseModel(requestModel.getWord(),statusCode,HttpStatusReasons.getReasonForStatus(statusCode),EntityUtils.toString(entity));
+                ResponseModel responseModel = new ResponseModel(requestModel.getWord(),statusCode,HttpStatusReasons.getReasonForStatus(statusCode),entity.getContent().readAllBytes());
                 requestModel.setResponse(responseModel);
 
             }catch (Exception e){
@@ -71,7 +71,7 @@ public class NetworkFunctions {
                 CloseableHttpResponse response = client.execute((HttpUriRequest) postRequest);
                 HttpEntity entity = response.getEntity();
                 int statusCode = response.getStatusLine().getStatusCode();
-                ResponseModel responseModel = new ResponseModel(requestModel.getWord(),statusCode,HttpStatusReasons.getReasonForStatus(statusCode),EntityUtils.toString(entity));
+                ResponseModel responseModel = new ResponseModel(requestModel.getWord(),statusCode,HttpStatusReasons.getReasonForStatus(statusCode),entity.getContent().readAllBytes());
                 requestModel.setResponse(responseModel);
             }catch (Exception e){
                 throw e;

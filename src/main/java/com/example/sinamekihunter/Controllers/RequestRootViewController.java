@@ -28,7 +28,6 @@ public class RequestRootViewController implements ControllersParent{
     public void setRequestModel(RequestModel requestModel) {
         this.requestModel = requestModel;
         setPaneMethodColor(requestModel);
-        System.out.println(requestModel.responseModel.getContent());
         request_method_label.setText(requestModel.getRequest_method());
         request_method_label.setStyle("-fx-text-fill: white;");
         if(requestModel.getUrl().length() > 40){endpoint_label.setText(requestModel.getUrl().substring(0,40) + "...");}

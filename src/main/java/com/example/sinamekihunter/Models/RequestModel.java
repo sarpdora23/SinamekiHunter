@@ -91,7 +91,7 @@ public class RequestModel extends Thread {
             resultController.updateRequest(this);
         }
         else if (Objects.equals(this.request_type, StringValues.NetworkValues.REQUEST_TYPE_PROXY)){
-            System.out.println(this.responseModel.getContent());
+            //System.out.println(this.responseModel.getContent());
             String a = responseModel.getContent() + "\r\n\r\n";
             this.getOutputStream().write(a.getBytes());
             this.getSocketModel().finishedRequest();

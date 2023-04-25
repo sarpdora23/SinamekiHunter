@@ -125,7 +125,7 @@ public class MainDashboardController implements ControllersParent{
                 AnchorPane anchorPane = (AnchorPane) domainsTabPane.getTabs().get(tab_index).getContent();
                 ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
                 VBox vbox = (VBox) scrollPane.getContent();
-                //vbox.getChildren()
+                vbox.getChildren().add(request_root_view);
             }
         });
 

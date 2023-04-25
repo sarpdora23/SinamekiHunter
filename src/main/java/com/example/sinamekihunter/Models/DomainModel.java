@@ -20,7 +20,9 @@ public class DomainModel {
     }
     public void addRequestToDomain(RequestModel requestModel) throws IOException {
         this.request_list.add(requestModel);
+
         if (ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE) != null){
+
             MainDashboardController mainDashboardController = (MainDashboardController) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
             mainDashboardController.addRequestToDashboard(requestModel,this.tabIndex);
         }

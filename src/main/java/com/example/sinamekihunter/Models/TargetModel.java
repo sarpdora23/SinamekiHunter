@@ -22,6 +22,7 @@ public class TargetModel {
             all_domains = new ArrayList<>();
 
             pure_domain = URLParseFunctions.getPureDomain(domain);
+            getReadyToListenTarget(pure_domain);
         }
     }
     public void getReadyToListenTarget(String domain){

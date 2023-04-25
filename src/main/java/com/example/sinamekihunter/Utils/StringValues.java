@@ -31,6 +31,10 @@ public class StringValues {
     public class NetworkValues{
         public static final String REQUEST_TYPE_GET = "GET";
         public static final String REQUEST_TYPE_POST = "POST";
+        public static final String REQUEST_TYPE_PUT = "PUT";
+        public static final String REQUEST_TYPE_DELETE = "DELETE";
+        public static final String REQUEST_TYPE_HEAD = "HEAD";
+        public static final String REQUEST_TYPE_OPTIONS = "OPTIONS";
         public static final String FUZZ_PARAM_VALUE = "FUZZ";
         public static final String SUBDOMAIN_DISCOVERY_NAME = "Subdomain";
         public static final String REQUEST_TYPE_DISCOVERY = "Discovery";

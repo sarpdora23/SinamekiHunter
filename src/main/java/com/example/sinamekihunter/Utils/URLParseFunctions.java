@@ -1,5 +1,10 @@
 package com.example.sinamekihunter.Utils;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class URLParseFunctions {
@@ -32,5 +37,39 @@ public class URLParseFunctions {
             return strings[1] + "." + strings[2];
         }
         return strings[0] + "." + strings[1];
+    }
+    //http://nahamstore.thm/product?id=1&name=Hoodie+%2B+Tee
+    public static HashMap getGetRequestParams(String url){
+        HashMap requestParams = new HashMap();
+        String[] splitParts = url.split("/");
+        String paramsPart = splitParts[splitParts.length - 1];
+        if (paramsPart.indexOf('?') != -1){
+            paramsPart = paramsPart.substring(paramsPart.indexOf('?')+1);
+            String[] params = paramsPart.split("&");
+            for (String paramValue: params) {
+                String[] param_value = paramValue.split("=");
+                requestParams.put(param_value[0],URLDecoder.decode(param_value[1], Charset.defaultCharset()));
+            }
+
+            return requestParams;
+        }
+        return null;
+    }
+    public static String requestParamsToUrlForm(HashMap<String,Object> requestParams){
+        String paramsEndpoint = "";
+        if (requestParams.keySet().size() > 0){
+            boolean qu_mark = true;
+            for (String key: requestParams.keySet()) {
+                if (qu_mark){
+                    qu_mark = false;
+                    paramsEndpoint = "?";
+                }
+                else{
+                    paramsEndpoint = paramsEndpoint + "&";
+                }
+                paramsEndpoint = paramsEndpoint + key + "=" + URLEncoder.encode((String) requestParams.get(key), StandardCharsets.UTF_8);
+            }
+        }
+        return paramsEndpoint;
     }
 }

@@ -27,6 +27,7 @@ public class StringValues {
         public static final String DISCOVERY_RESULT_VIEW_FXML = "discovery-result-view.xml.fxml";
         public static final String PROXY_START_VIEW_FXML = "start-proxy-view.fxml";
         public static final String REQUEST_ROOT_VIEW_FXML= "request-root-view.fxml";
+        public static final String PROXY_REQUEST_PARENT_VIEW = "proxy-request-parent-view.fxml";
     }
     public class NetworkValues{
         public static final String REQUEST_TYPE_GET = "GET";

@@ -47,12 +47,24 @@ public class TargetModel {
     public String getProtocol(){
         return this.protocol;
     }
+    public void addDomainModel(DomainModel domainModel){
+        this.all_domains.add(domainModel);
+    }
     public ArrayList<DomainModel> getDomainList(){
         return this.all_domains;
     }
     public void checkProxyRequest(RequestModel requestModel) throws IOException {
         String url = URLParseFunctions.getDomainHost(requestModel.getUrl());
         //TODO BURDA BI IF KONTROLU DOMAINMODEL CHECK YAPILSIN
-        all_domains.get(0).addRequestToDomain(requestModel);
+        int index = 0;
+        for (int i = 0; i<all_domains.size();i++) {
+            DomainModel domainModel = all_domains.get(i);
+            if (domainModel.getDomainUrl().equals(url)){
+                index = i;
+                break;
+            }
+        }
+        System.out.println("CHECK URL: " + url + " index: " + index);
+        all_domains.get(index).addRequestToDomain(requestModel);
     }
 }

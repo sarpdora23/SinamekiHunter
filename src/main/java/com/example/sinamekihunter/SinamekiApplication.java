@@ -8,6 +8,7 @@ import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Network.Proxy;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
+import com.example.sinamekihunter.Utils.URLParseFunctions;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,8 +19,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SinamekiApplication extends Application {
@@ -30,6 +33,7 @@ public class SinamekiApplication extends Application {
         stage.setTitle(StringValues.ApplicationValues.MAIN_WINDOW_TITLE);
         stage.setScene(scene);
         stage.show();
+        test();
         init_values(stage,scene,fxmlLoader.getController());
     }
     public static void main(String[] args) {
@@ -40,9 +44,8 @@ public class SinamekiApplication extends Application {
         ControllersManager.createInstance(first_controller,first_scene,StringValues.SceneNames.TARGET_INIT_SCENE);
     }
     private void test() throws IOException {
-        Proxy.setProxyUp(8085);
-        Proxy proxy = Proxy.getInstance();
-        proxy.startServer();
-      //  proxy.start(8085);
+        String url = "http://nahamstore.thm/product/test?id=1&name=Hoodie+%2B+Tee";
+        String endpoint = url.substring(0,url.indexOf('?'));
+        System.out.println(endpoint);
     }
 }

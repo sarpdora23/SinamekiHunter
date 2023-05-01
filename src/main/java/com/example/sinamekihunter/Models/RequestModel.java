@@ -4,20 +4,18 @@ import com.example.sinamekihunter.Controllers.DiscoveryResultController;
 import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
+import com.example.sinamekihunter.Utils.URLParseFunctions;
 import org.apache.http.HttpHeaders;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class RequestModel extends Thread {
     private RequestThreadModel requestThreadModel;
     private HashMap<String,Object> header_data = new HashMap<>();
-    private HashMap<String,Object> body_data = new HashMap<>();
+    private HashMap<String,Object> request_data = new HashMap<>();
     private HashMap<String,Object> json_data = new HashMap<>();
     private String request_text;
     private String word;
@@ -36,7 +34,7 @@ public class RequestModel extends Thread {
         this.request_method = request_method;
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY;
     }
-    public RequestModel(String url,String request_method,HashMap header_data,HashMap body_data,Boolean isJsonData,HashMap json_data,String request_text,OutputStream outputStream){
+    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData, HashMap json_data, String request_text, OutputStream outputStream){
         this.url = url;
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
@@ -46,7 +44,7 @@ public class RequestModel extends Thread {
         this.outputStream = outputStream;
         this.request_method = request_method;
         this.header_data = header_data;
-        this.body_data = body_data;
+        this.request_data = request_data;
         this.isJsonData = isJsonData;
         this.request_text = request_text;
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_PROXY;
@@ -57,11 +55,8 @@ public class RequestModel extends Thread {
     public HashMap getHeaderData(){
         return this.header_data;
     }
-    public HashMap getBodyData(){
-        return this.body_data;
-    }
-    public HashMap getJsonData(){
-        return this.json_data;
+    public HashMap getRequestData(){
+        return this.request_data;
     }
     public String getUrl(){return this.url;}
     public ResponseModel getResponse(){
@@ -72,16 +67,13 @@ public class RequestModel extends Thread {
     public String getRequestText(){return this.request_text;}
     public OutputStream getOutputStream(){return this.outputStream;}
     public SocketModel getSocketModel(){return this.socketModel;}
-    public void setBodyData(HashMap<String, Object> body_data) {
-        this.body_data = body_data;
+    public void setRequestData(HashMap<String, Object> body_data) {
+        this.request_data = body_data;
+        updateGetRequestUrl();
     }
 
     public void setHeaderData(HashMap<String, Object> header_data) {
         this.header_data = header_data;
-    }
-
-    public void setJsonData(HashMap<String, Object> json_data) {
-        this.json_data = json_data;
     }
     public void setResponse(ResponseModel responseModel) throws IOException {
 
@@ -91,7 +83,6 @@ public class RequestModel extends Thread {
             resultController.updateRequest(this);
         }
         else if (Objects.equals(this.request_type, StringValues.NetworkValues.REQUEST_TYPE_PROXY)){
-            //System.out.println(this.responseModel.getContent());
             byte[] a = responseModel.getContent();
             this.getOutputStream().write(a);
             this.getSocketModel().finishedRequest();
@@ -102,18 +93,10 @@ public class RequestModel extends Thread {
     public void setSocketModel(SocketModel socketModel){
         this.socketModel = socketModel;
     }
-    public void addHeader(String key, Object value){
-        this.header_data.put(key,value);
-    }
-    public void addBody(String key,Object value){
-        this.body_data.put(key,value);
-    }
-    public void addJson(String key,Object value){
-        this.json_data.put(key,value);
-    }
     public void setRequestMethod(String request_method){
         this.request_method = request_method;
     }
+
     public String getWord(){
         return this.word;
     }
@@ -125,14 +108,20 @@ public class RequestModel extends Thread {
             System.out.println(key+"=>"+header_data.get(key));
         }
         System.out.println("-----Body-----");
-        for (Object key:body_data.keySet()) {
-            System.out.println(key+"=>"+body_data.get(key));
+        for (Object key: request_data.keySet()) {
+            System.out.println(key+"=>"+ request_data.get(key));
         }
         if (this.isJsonData){
             System.out.println("-----Json-----");
             for (Object key:json_data.keySet()) {
                 System.out.println(key+"=>"+json_data.get(key));
             }
+        }
+    }
+    private void updateGetRequestUrl(){
+        if (getRequest_method() == StringValues.NetworkValues.REQUEST_TYPE_GET && getRequestData().keySet().size() != 0){
+            String endpoint = url.substring(0,url.indexOf('?'));
+            this.url = endpoint + URLParseFunctions.requestParamsToUrlForm(getRequestData());
         }
     }
     @Override

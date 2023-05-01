@@ -3,7 +3,6 @@ package com.example.sinamekihunter.Utils;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.ResponseModel;
 import org.apache.http.*;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,7 +13,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -61,7 +59,7 @@ public class NetworkFunctions {
                 }
                 else{
                     List<NameValuePair> params = new ArrayList<>();
-                    for (Object body_key_object: requestModel.getBodyData().keySet()) {
+                    for (Object body_key_object: requestModel.getRequestData().keySet()) {
                         String body_key = body_key_object.toString();
                         params.add(new BasicNameValuePair(body_key,(String) requestModel.getHeaderData().get(body_key_object)));
 
@@ -89,7 +87,7 @@ public class NetworkFunctions {
         return result.toString(StandardCharsets.US_ASCII);
     }
     public static RequestModel stringToRequestModel(String requestString,OutputStream outputStream){
-        HashMap bodyParams = new HashMap<>();
+        HashMap requestData = new HashMap();;
         HashMap headerParams = new HashMap<>();
         HashMap jsonParams = new HashMap<>();
         String method = "";
@@ -116,23 +114,30 @@ public class NetworkFunctions {
             String row = headersAndInfo[i];
             headerParams.put(row.split(": ")[0],row.substring(row.indexOf(": ")+2));
         }
-        if (stringSplits.length > 1){
-            String body = stringSplits[1];
-            //TODO JSON OLABILIR ONUN KONTROLU YAPILMALI.
-            if(true){
-                String[] params = body.split("&");
-                isJson = false;
-                for (String param:params) {
-                    String[] parameter = param.split("=");
-                    bodyParams.put(parameter[0],parameter[1]);
+        if(method == StringValues.NetworkValues.REQUEST_TYPE_GET){
+            requestData = URLParseFunctions.getGetRequestParams(endpoint);
+        }
+        else{
+            if (stringSplits.length > 1){
+
+                String body = stringSplits[1];
+                //TODO JSON OLABILIR ONUN KONTROLU YAPILMALI.
+                if(true){
+                    String[] params = body.split("&");
+                    isJson = false;
+                    for (String param:params) {
+                        String[] parameter = param.split("=");
+                        requestData.put(parameter[0],parameter[1]);
+                    }
+                }
+                else{
+                    //JSON
+                    isJson = true;
                 }
             }
-            else{
-                //JSON
-                isJson = true;
-            }
         }
-        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,bodyParams,isJson,jsonParams,requestString,outputStream);
+
+        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,requestData,isJson,jsonParams,requestString,outputStream);
         return createdRequestModel;
     }
 }

@@ -2,7 +2,6 @@ package com.example.sinamekihunter.Models;
 
 
 import com.example.sinamekihunter.Utils.StringValues;
-import javafx.application.Platform;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,8 +79,7 @@ public class RequestThreadModel {
                 RequestModel requestModel = new RequestModel(url,this,word,requestMethod);
                 requestModel.setRequestMethod(this.threadMethod);
                 requestModel.setHeaderData(headerDataCopy);
-                requestModel.setBodyData(bodyDataCopy);
-                requestModel.setJsonData(jsonDataCopy);
+                requestModel.setRequestData(bodyDataCopy);
 
                 switch (fuzzParamType) {
                     case "HEADER":
@@ -91,16 +89,16 @@ public class RequestThreadModel {
                         requestModel.getHeaderData().put(fuzzParam, value);
                         break;
                     case "BODY":
-                        value = (String) requestModel.getBodyData().get(fuzzParam);
+                        value = (String) requestModel.getRequestData().get(fuzzParam);
                         replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
                         value = word + value.substring(replaceIndex + 4);
-                        requestModel.getBodyData().put(fuzzParam, value);
+                        requestModel.getRequestData().put(fuzzParam, value);
                         break;
                     case "JSON":
-                        value = (String) requestModel.getJsonData().get(fuzzParam);
+                        value = (String) requestModel.getRequestData().get(fuzzParam);
                         replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
                         value = word + value.substring(replaceIndex + 4);
-                        requestModel.getJsonData().put(fuzzParam, value);
+                        requestModel.getRequestData().put(fuzzParam, value);
                         break;
                     default:
                         break;

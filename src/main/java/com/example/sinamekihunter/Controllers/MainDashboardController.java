@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -36,7 +37,6 @@ public class MainDashboardController implements ControllersParent{
     protected void createAddSubdomainTab(){
         Tab addSubdomain = new Tab("+");
         domainsTabPane.getTabs().add(addSubdomain);
-        System.out.println("Deneme");
     }
     @Override
     public void InitController() {
@@ -50,7 +50,6 @@ public class MainDashboardController implements ControllersParent{
         domainsTabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                System.out.println("t1: " + t1 +" size:" + domainsTabPane.getTabs().size());
                 if ((int)t1 == domainsTabPane.getTabs().size() - 1){
                     Tab addSubdomainTab = domainsTabPane.getTabs().get(t1.intValue());
                     FXMLLoader addSubdomainTabFXML = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.ADD_SUBDOMAIN_TAB_FXML));
@@ -109,7 +108,8 @@ public class MainDashboardController implements ControllersParent{
         }
         alert.show();
     }
-    public void addRequestToDashboard(RequestModel requestModel,int tab_index) throws IOException {
+    public void addRequestToDashboard(RequestModel requestModel,int tabIndex) throws IOException {
+       // AnchorPane parentPane = anchorPane;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -120,12 +120,15 @@ public class MainDashboardController implements ControllersParent{
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
                 RequestRootViewController requestRootViewController = fxmlLoader.getController();
                 requestRootViewController.setRequestModel(requestModel);
-                AnchorPane anchorPane = (AnchorPane) domainsTabPane.getTabs().get(tab_index).getContent();
+                AnchorPane anchorPane = (AnchorPane) domainsTabPane.getTabs().get(tabIndex).getContent();
                 ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
                 VBox vbox = (VBox) scrollPane.getContent();
                 vbox.getChildren().add(request_root_view);
+
+
             }
         });
 

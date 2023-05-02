@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 
 public class RequestModel extends Thread {
     private RequestThreadModel requestThreadModel;
@@ -26,6 +27,7 @@ public class RequestModel extends Thread {
     private String request_type;
     private OutputStream outputStream;
     private SocketModel socketModel;
+    private String id;
 
     public RequestModel(String url,RequestThreadModel requestThreadModel,String word,String request_method){
         this.url = url;
@@ -33,8 +35,9 @@ public class RequestModel extends Thread {
         this.word = word;
         this.request_method = request_method;
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY;
+        this.id = UUID.randomUUID().toString();
     }
-    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData, HashMap json_data, String request_text, OutputStream outputStream){
+    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData, String request_text, OutputStream outputStream){
         this.url = url;
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
@@ -48,9 +51,7 @@ public class RequestModel extends Thread {
         this.isJsonData = isJsonData;
         this.request_text = request_text;
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_PROXY;
-        if (isJsonData){
-            this.json_data = json_data;
-        }
+        this.id = UUID.randomUUID().toString();
     }
     public HashMap getHeaderData(){
         return this.header_data;
@@ -65,6 +66,7 @@ public class RequestModel extends Thread {
     public String getRequest_method(){return this.request_method;}
     public String getRequestType(){return this.request_type;}
     public String getRequestText(){return this.request_text;}
+    public String getUid(){return this.id;}
     public OutputStream getOutputStream(){return this.outputStream;}
     public SocketModel getSocketModel(){return this.socketModel;}
     public void setRequestData(HashMap<String, Object> body_data) {

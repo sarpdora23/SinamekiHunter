@@ -74,7 +74,6 @@ public class RequestThreadModel {
 
                 HashMap headerDataCopy = (HashMap) headerData.clone();
                 HashMap bodyDataCopy = (HashMap) bodyData.clone();
-                HashMap jsonDataCopy = (HashMap) bodyData.clone();
 
                 RequestModel requestModel = new RequestModel(url,this,word,requestMethod);
                 requestModel.setRequestMethod(this.threadMethod);
@@ -89,12 +88,6 @@ public class RequestThreadModel {
                         requestModel.getHeaderData().put(fuzzParam, value);
                         break;
                     case "BODY":
-                        value = (String) requestModel.getRequestData().get(fuzzParam);
-                        replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
-                        value = word + value.substring(replaceIndex + 4);
-                        requestModel.getRequestData().put(fuzzParam, value);
-                        break;
-                    case "JSON":
                         value = (String) requestModel.getRequestData().get(fuzzParam);
                         replaceIndex = value.indexOf(StringValues.NetworkValues.FUZZ_PARAM_VALUE);
                         value = word + value.substring(replaceIndex + 4);

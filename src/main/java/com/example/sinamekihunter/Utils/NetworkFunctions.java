@@ -2,6 +2,8 @@ package com.example.sinamekihunter.Utils;
 
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.ResponseModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.http.*;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -9,12 +11,15 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +60,8 @@ public class NetworkFunctions {
 
                 }
                 if (requestModel.isJsonData){
-
+                    StringEntity stringEntity = new StringEntity(hashmapToString(requestModel.getRequestData()), ContentType.APPLICATION_JSON);
+                    postRequest.setEntity(stringEntity);
                 }
                 else{
                     List<NameValuePair> params = new ArrayList<>();
@@ -76,6 +82,7 @@ public class NetworkFunctions {
             }
         }
     }
+    //TODO nahamstore'da sotck özelliğinde request response'da bir sıkıntı var ona bakmayı unutma
     public static String inputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -89,7 +96,7 @@ public class NetworkFunctions {
     public static RequestModel stringToRequestModel(String requestString,OutputStream outputStream){
         HashMap requestData = new HashMap();;
         HashMap headerParams = new HashMap<>();
-        HashMap jsonParams = new HashMap<>();
+
         String method = "";
         String endpoint = "";
         Boolean isJson = false;
@@ -121,23 +128,35 @@ public class NetworkFunctions {
             if (stringSplits.length > 1){
 
                 String body = stringSplits[1];
-                //TODO JSON OLABILIR ONUN KONTROLU YAPILMALI.
-                if(true){
+
+                if(body.indexOf('{') == -1 && body.indexOf('}') == -1){
                     String[] params = body.split("&");
                     isJson = false;
                     for (String param:params) {
                         String[] parameter = param.split("=");
-                        requestData.put(parameter[0],parameter[1]);
+                        if(parameter.length < 2){ requestData.put(parameter[0],"");}
+                        else{requestData.put(parameter[0],parameter[1]);}
                     }
                 }
                 else{
-                    //JSON
                     isJson = true;
+                    requestData = jsonToHashMap(body);
                 }
             }
         }
 
-        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,requestData,isJson,jsonParams,requestString,outputStream);
+        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,requestData,isJson,requestString,outputStream);
         return createdRequestModel;
+    }
+    public static String hashmapToString(HashMap hashMap){
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(hashMap);
+        return jsonString;
+    }
+    public static HashMap jsonToHashMap(String json) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<HashMap>(){}.getType();
+        HashMap<String, Object> hashMap = gson.fromJson(json, type);
+        return hashMap;
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.web.WebView?>
+
+<Pane prefHeight="536.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.RequestDetailController">
+   <children>
+      <SplitPane dividerPositions="0.44812188074599413" prefHeight="536.0" prefWidth="763.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <ToolBar prefHeight="58.0" prefWidth="338.0">
+                     <items>
+                        <ScrollPane prefHeight="30.0" prefWidth="322.0">
+                           <content>
+                              <HBox fx:id="vuln_sticker_hbox" prefHeight="38.0" prefWidth="318.0" />
+                           </content>
+                        </ScrollPane>
+                     </items>
+                  </ToolBar>
+                  <ScrollPane layoutX="2.0" layoutY="60.0" prefHeight="474.0" prefWidth="338.0">
+                     <content>
+                        <TextArea fx:id="request_content_textarea" editable="false" prefHeight="472.0" prefWidth="336.0" />
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <ScrollPane fx:id="response_text_parent" layoutY="59.0" prefHeight="474.0" prefWidth="418.0">
+                    <content>
+                        <TextArea fx:id="response_content_textarea" editable="false" prefHeight="469.0" prefWidth="413.0" />
+                    </content>
+                  </ScrollPane>
+                  <ToolBar prefHeight="9.0" prefWidth="418.0">
+                    <items>
+                        <ToggleButton fx:id="response_raw_toggle_button" mnemonicParsing="false" prefHeight="46.0" prefWidth="66.0" selected="true" text="Raw Data" />
+                    </items>
+                  </ToolBar>
+                  <WebView fx:id="response_webview" layoutY="63.0" opacity="0.0" prefHeight="461.0" prefWidth="407.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</Pane>

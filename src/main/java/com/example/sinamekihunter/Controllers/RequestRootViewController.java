@@ -1,12 +1,20 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.RequestModel;
+import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.StringValues;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.UUID;
 
 public class RequestRootViewController implements ControllersParent{
     private RequestModel requestModel;
@@ -75,5 +83,32 @@ public class RequestRootViewController implements ControllersParent{
             request_root_pane.setBackground(new Background(new BackgroundFill(Color.rgb(235, 243, 251),new CornerRadii(0,0,0,0,false), Insets.EMPTY)));
             request_root_pane.setBorder(new Border((new BorderStroke(Color.rgb(97, 175, 254), BorderStrokeStyle.SOLID, null, null))));
         }
+    }
+    @FXML
+    protected void showDetails() throws IOException {
+        Stage detail_stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.REQUEST_DETAIL_VIEW_FXML));
+        Scene request_detail_scene = new Scene(fxmlLoader.load());
+        RequestDetailController requestDetailController = fxmlLoader.getController();
+        requestDetailController.setRequestModel(requestModel);
+        detail_stage.setTitle("Request Detail");
+        detail_stage.setScene(request_detail_scene);
+        String stage_uid = UUID.randomUUID().toString();
+        StageManager.getInstance().createStage(StringValues.StageNames.REQUEST_DETAIL_VIEW_STAGE +stage_uid,
+                detail_stage,
+                StringValues.SceneNames.REQUEST_DETAIL_VIEW_SCENE + stage_uid,
+                requestDetailController);
+        detail_stage.setOnCloseRequest(event -> {
+            StageManager.getInstance().closeStage(StringValues.StageNames.REQUEST_DETAIL_VIEW_STAGE + stage_uid);
+        });
+        detail_stage.show();
+    }
+    @FXML
+    protected void sendRepater(){
+        //TODO REPATER'A GÖNDER
+    }
+    @FXML
+    protected void sendIntruder(){
+        //TODO INTRUDER'A GÖNDER
     }
 }

@@ -55,7 +55,7 @@ public class TargetModel {
     }
     public void checkProxyRequest(RequestModel requestModel) throws IOException {
         String url = URLParseFunctions.getDomainHost(requestModel.getUrl());
-        //TODO BURDA BI IF KONTROLU DOMAINMODEL CHECK YAPILSIN
+
         int index = 0;
         for (int i = 0; i<all_domains.size();i++) {
             DomainModel domainModel = all_domains.get(i);

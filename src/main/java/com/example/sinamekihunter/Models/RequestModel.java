@@ -28,6 +28,7 @@ public class RequestModel extends Thread {
     private OutputStream outputStream;
     private SocketModel socketModel;
     private String id;
+    private byte[] raw_data;
 
     public RequestModel(String url,RequestThreadModel requestThreadModel,String word,String request_method){
         this.url = url;
@@ -37,11 +38,11 @@ public class RequestModel extends Thread {
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY;
         this.id = UUID.randomUUID().toString();
     }
-    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData, String request_text, OutputStream outputStream){
+    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData,String request_text, OutputStream outputStream,byte[] raw_data){
         this.url = url;
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
-            this.url = "http://"+header_data.get("Host")+url;
+            this.url = header_data.get("Host")+url;
             System.out.println("URL:"+this.url);
         }
         this.outputStream = outputStream;
@@ -52,7 +53,9 @@ public class RequestModel extends Thread {
         this.request_text = request_text;
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_PROXY;
         this.id = UUID.randomUUID().toString();
+        this.raw_data = raw_data;
     }
+    public byte[] getRaw_data(){return this.raw_data;}
     public HashMap getHeaderData(){
         return this.header_data;
     }

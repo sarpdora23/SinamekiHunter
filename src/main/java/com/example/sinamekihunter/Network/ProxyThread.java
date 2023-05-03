@@ -1,8 +1,10 @@
 package com.example.sinamekihunter.Network;
 
 import com.example.sinamekihunter.Models.RequestModel;
+import com.example.sinamekihunter.Models.ResponseModel;
 import com.example.sinamekihunter.Models.SocketModel;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
+import com.example.sinamekihunter.Utils.URLParseFunctions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,7 @@ public class ProxyThread extends Thread{
     public void run(){
         try {
             while(this.serverSocket.isBound() && !this.serverSocket.isClosed()){
+
                 Socket socket = serverSocket.accept();
                 System.out.println("Request is here!!!!");
                 InputStream inputStream  = socket.getInputStream();
@@ -30,8 +33,7 @@ public class ProxyThread extends Thread{
                     socketModel.finishedRequest();
                 }
                 else{
-                    System.out.println(request);
-                    RequestModel requestModel = NetworkFunctions.stringToRequestModel(request,outputStream);
+                    RequestModel requestModel = NetworkFunctions.stringToRequestModel(request,outputStream,inputStream);
                     requestModel.setSocketModel(socketModel);
                     NetworkFunctions.sendRequest(requestModel);
                 }
@@ -40,6 +42,8 @@ public class ProxyThread extends Thread{
 
         } catch (IOException e) {
             //throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

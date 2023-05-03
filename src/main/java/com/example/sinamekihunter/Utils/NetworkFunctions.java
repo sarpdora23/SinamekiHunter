@@ -16,19 +16,30 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class NetworkFunctions {
     public static void sendRequest(RequestModel requestModel) throws IOException {
-        HttpClientBuilder httpClientBuilder = HttpClients.custom();
-        RequestConfig config = RequestConfig.custom().setRedirectsEnabled(false).build();
+        HttpClientBuilder httpClientBuilder;
+        RequestConfig config;
+        if(requestModel.getRequestType() == StringValues.NetworkValues.REQUEST_TYPE_PROXY){
+            httpClientBuilder = HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy());
+            config = RequestConfig.custom().setRedirectsEnabled(true).build();
+        }
+        else{
+            httpClientBuilder = HttpClients.custom();
+            config = RequestConfig.custom().setRedirectsEnabled(false).build();
+        }
         CloseableHttpClient client = httpClientBuilder.setDefaultRequestConfig(config).build();
 
         if (requestModel.getRequest_method() == StringValues.NetworkValues.REQUEST_TYPE_GET){
@@ -93,7 +104,16 @@ public class NetworkFunctions {
         }
         return result.toString(StandardCharsets.US_ASCII);
     }
-    public static RequestModel stringToRequestModel(String requestString,OutputStream outputStream){
+    public static byte[] inputStreamToByteArray(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while (inputStream.available() > 0 && (length = inputStream.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toByteArray();
+    }
+    public static RequestModel stringToRequestModel(String requestString,OutputStream outputStream,InputStream inputStream) throws IOException {
         HashMap requestData = new HashMap();;
         HashMap headerParams = new HashMap<>();
 
@@ -145,7 +165,7 @@ public class NetworkFunctions {
             }
         }
 
-        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,requestData,isJson,requestString,outputStream);
+        RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,requestData,isJson,requestString,outputStream,inputStreamToByteArray(inputStream));
         return createdRequestModel;
     }
     public static String hashmapToString(HashMap hashMap){
@@ -159,4 +179,5 @@ public class NetworkFunctions {
         HashMap<String, Object> hashMap = gson.fromJson(json, type);
         return hashMap;
     }
+
 }

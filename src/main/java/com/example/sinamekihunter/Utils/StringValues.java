@@ -44,4 +44,11 @@ public class StringValues {
         public static final String REQUEST_TYPE_DISCOVERY = "Discovery";
         public static final String REQUEST_TYPE_PROXY = "Proxy";
     }
+    public class VulnValues{
+        public static final String LFI = "LFI";
+        public static final String SSRF = "SSRF";
+        public static final String SSTI = "SSTI";
+        public static final String OPEN_REDIRECT = "OPEN REDIRECT";
+        public static final String XSS = "XSS";
+    }
 }

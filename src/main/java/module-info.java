@@ -8,6 +8,7 @@ module com.example.sinamekihunter {
     requires org.apache.httpcomponents.httpcore;
     requires org.apache.httpcomponents.httpclient;
     requires com.google.gson;
+
     opens com.example.sinamekihunter to javafx.fxml;
     exports com.example.sinamekihunter;
     exports com.example.sinamekihunter.Controllers;

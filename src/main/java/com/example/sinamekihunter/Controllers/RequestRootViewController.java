@@ -3,14 +3,18 @@ package com.example.sinamekihunter.Controllers;
 import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.SinamekiApplication;
+import com.example.sinamekihunter.Utils.ColorValues;
 import com.example.sinamekihunter.Utils.StringValues;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,6 +32,8 @@ public class RequestRootViewController implements ControllersParent{
     private Label request_method_label;
     @FXML
     private Pane request_root_pane;
+    @FXML
+    private GridPane vuln_sticker_pane;
     @Override
     public void InitController() {
 
@@ -43,7 +49,35 @@ public class RequestRootViewController implements ControllersParent{
         endpoint_label.setStyle("-fx-font-weight: bold");
         status_code_label.setText(String.valueOf(requestModel.getResponse().getStatusCode()));
         length_label.setText(String.valueOf(requestModel.responseModel.getContentLength()));
-
+        int current_row = 0;
+        int current_column = 0;
+        for (String vuln: this.requestModel.getPossibleVulns()) {
+            Label vuln_sticker = new Label(vuln);
+            vuln_sticker.setFont(Font.font(vuln_sticker.getFont().getName(), FontWeight.BOLD,10));
+            vuln_sticker.setTextFill(Color.WHITE);
+            vuln_sticker.setMinWidth(32);
+            vuln_sticker.setAlignment(Pos.CENTER);
+            if (vuln == StringValues.VulnValues.LFI){
+                vuln_sticker.setBackground(new Background(new BackgroundFill(ColorValues.VULN_STICKER.LFI,new CornerRadii(4,4,4,4,false), Insets.EMPTY)));
+            }
+            else if(vuln == StringValues.VulnValues.OPEN_REDIRECT){
+                vuln_sticker.setBackground(new Background(new BackgroundFill(ColorValues.VULN_STICKER.OPEN_REDIRECT,new CornerRadii(4,4,4,4,false), Insets.EMPTY)));
+            }
+            else if(vuln == StringValues.VulnValues.SSRF){
+                vuln_sticker.setBackground(new Background(new BackgroundFill(ColorValues.VULN_STICKER.SSRF,new CornerRadii(4,4,4,4,false), Insets.EMPTY)));
+            }
+            else if(vuln == StringValues.VulnValues.SSTI){
+                vuln_sticker.setBackground(new Background(new BackgroundFill(ColorValues.VULN_STICKER.SSTI,new CornerRadii(4,4,4,4,false), Insets.EMPTY)));
+            } else if (vuln == StringValues.VulnValues.XSS) {
+                vuln_sticker.setBackground(new Background(new BackgroundFill(ColorValues.VULN_STICKER.XSS,new CornerRadii(4,4,4,4,false), Insets.EMPTY)));
+            }
+            this.vuln_sticker_pane.add(vuln_sticker,current_row,current_column);
+            current_column++;
+            if (current_column == 3){
+                current_row++;
+                current_column = 0;
+            }
+        }
     }
     public RequestModel getRequestModel(){return this.requestModel;}
     private void setPaneMethodColor(RequestModel requestModel){

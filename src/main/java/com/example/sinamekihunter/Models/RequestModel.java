@@ -5,13 +5,12 @@ import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
 import com.example.sinamekihunter.Utils.URLParseFunctions;
+import com.example.sinamekihunter.Vulnerabilities.ControlledVuln;
 import org.apache.http.HttpHeaders;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class RequestModel extends Thread {
     private RequestThreadModel requestThreadModel;
@@ -29,6 +28,8 @@ public class RequestModel extends Thread {
     private SocketModel socketModel;
     private String id;
     private byte[] raw_data;
+    private ArrayList<ControlledVuln> controlled_vulns = new ArrayList<>();
+    private ArrayList<String> possible_vulns = new ArrayList<>();
 
     public RequestModel(String url,RequestThreadModel requestThreadModel,String word,String request_method){
         this.url = url;
@@ -72,6 +73,10 @@ public class RequestModel extends Thread {
     public String getUid(){return this.id;}
     public OutputStream getOutputStream(){return this.outputStream;}
     public SocketModel getSocketModel(){return this.socketModel;}
+    public ArrayList<ControlledVuln> getControlledVulns(){return this.controlled_vulns;}
+    public HashSet<String> getPossibleVulns(){return new HashSet<>(this.possible_vulns);}
+    public void addControlledVuln(ControlledVuln controlledVuln){this.controlled_vulns.add(controlledVuln);}
+    public void addPossibleVuln(String possible_vuln){this.possible_vulns.add(possible_vuln);}
     public void setRequestData(HashMap<String, Object> body_data) {
         this.request_data = body_data;
         updateGetRequestUrl();

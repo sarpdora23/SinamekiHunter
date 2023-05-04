@@ -5,6 +5,7 @@ import com.example.sinamekihunter.Controllers.TargetInitController;
 import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.RequestModel;
+import com.example.sinamekihunter.Models.VulnModel;
 import com.example.sinamekihunter.Network.Proxy;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SinamekiApplication extends Application {
     @Override
@@ -33,7 +36,7 @@ public class SinamekiApplication extends Application {
         stage.setTitle(StringValues.ApplicationValues.MAIN_WINDOW_TITLE);
         stage.setScene(scene);
         stage.show();
-        test();
+        //test();
         init_values(stage,scene,fxmlLoader.getController());
     }
     public static void main(String[] args) {
@@ -42,10 +45,18 @@ public class SinamekiApplication extends Application {
     private void init_values(Stage first_stage, Scene first_scene, ControllersParent first_controller){
         StageManager.createInstance(first_stage,StringValues.StageNames.TARGET_INIT_STAGE);
         ControllersManager.createInstance(first_controller,first_scene,StringValues.SceneNames.TARGET_INIT_SCENE);
+        initVulnModels();
+    }
+    private void initVulnModels(){
+        VulnModel.getLFI();
+        VulnModel.getSSRF();
+        VulnModel.getOpenRedirect();
+        VulnModel.getSSTI();
+        VulnModel.getXSS();
     }
     private void test() throws IOException {
-        String url = "http://nahamstore.thm/product/test?id=1&name=Hoodie+%2B+Tee";
-        String endpoint = url.substring(0,url.indexOf('?'));
-        System.out.println(endpoint);
+        Pattern pattern = Pattern.compile("agent \\d\\d\\d");
+        Matcher matcher = pattern.matcher("agent 007");
+        System.out.println(matcher.find());
     }
 }

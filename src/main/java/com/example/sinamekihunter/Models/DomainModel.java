@@ -22,7 +22,7 @@ public class DomainModel {
     }
     public void addRequestToDomain(RequestModel requestModel) throws IOException {
         this.request_list.add(requestModel);
-
+        vulnScan(requestModel);
         if (ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE) != null){
 
             MainDashboardController mainDashboardController = (MainDashboardController) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
@@ -31,5 +31,19 @@ public class DomainModel {
         else{
             this.request_list.remove(this.request_list.size() - 1);
         }
+    }
+    private void vulnScan(RequestModel requestModel){
+
+        VulnModel LFI = VulnModel.getLFI();
+        VulnModel SSRF = VulnModel.getSSRF();
+        VulnModel SSTI = VulnModel.getSSTI();
+        VulnModel OPEN_REDIRECT = VulnModel.getOpenRedirect();
+        VulnModel XSS = VulnModel.getXSS();
+        LFI.checkVulnerability(requestModel);
+        SSRF.checkVulnerability(requestModel);
+        SSTI.checkVulnerability(requestModel);
+        OPEN_REDIRECT.checkVulnerability(requestModel);
+        XSS.checkVulnerability(requestModel);
+
     }
 }

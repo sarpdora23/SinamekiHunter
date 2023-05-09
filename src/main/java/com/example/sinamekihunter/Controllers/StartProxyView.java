@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
-public class StartProxyViewController implements ControllersParent{
+public class StartProxyView implements ControllersParent{
 
      @FXML
      private Button startButton;

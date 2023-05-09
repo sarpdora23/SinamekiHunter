@@ -5,16 +5,14 @@ import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.RequestThreadModel;
 import com.example.sinamekihunter.Models.ResponseModel;
 import com.example.sinamekihunter.Models.TargetModel;
-import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.DiscoverThread;
+import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -22,12 +20,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.function.Predicate;
 
-public class DiscoveryResultController implements ControllersParent {
+public class DiscoveryResult implements ControllersParent {
     private DiscoverThread discoverThread;
     private RequestThreadModel requestThreadModel;
     private int totalWordCount;
@@ -170,7 +166,18 @@ public class DiscoveryResultController implements ControllersParent {
     protected void addSubdomain(){
         ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
         String url = selectedResponse.getWord() + "." + TargetModel.getInstance().getPureDomain();
-        AddSubdomainTabController.addSubdomain(url);
+        AddSubdomainTab.addSubdomain(url);
+    }
+    @FXML
+    protected void sendRepeater() throws IOException {
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        if (!mainDashboardController.isRepeaterOpen){
+            mainDashboardController.openRepeater();
+        }
+        Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
+        ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
+        System.out.println("FLAG:"+selectedResponse.getRequestModel());
+        repeaterController.setRequest(NetworkFunctions.requestModelToString(selectedResponse.getRequestModel()));
     }
 }
 

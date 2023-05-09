@@ -17,22 +17,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-public class MainDashboardController implements ControllersParent{
+public class MainDashboard implements ControllersParent{
     private boolean isCreated = false;
     @FXML
     public Label targetDomainLabel;
     @FXML
     public TabPane domainsTabPane;
     private HashMap<Integer, ObservableList> tabRequestsMap;
-
-
+    public boolean isRepeaterOpen = false;
     @FXML
     protected void createAddSubdomainTab(){
         Tab addSubdomain = new Tab("+");
@@ -56,7 +54,7 @@ public class MainDashboardController implements ControllersParent{
                     try {
                         Parent addSubdomainTabRoot = addSubdomainTabFXML.load();
                         addSubdomainTab.setContent(addSubdomainTabRoot);
-                        AddSubdomainTabController tabController = addSubdomainTabFXML.getController();
+                        AddSubdomainTab tabController = addSubdomainTabFXML.getController();
                         tabController.tabPane = domainsTabPane;
 
                     } catch (IOException e) {
@@ -72,7 +70,7 @@ public class MainDashboardController implements ControllersParent{
         Stage subdomain_discovery_stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.DISCOVERY_SUBDOMAIN_VIEW_FXML));
         Scene subdomain_discovery_scene = new Scene(fxmlLoader.load());
-        DiscoverySubdomainViewController discovery_subdomain_controller = fxmlLoader.getController();
+        DiscoverySubdomainView discovery_subdomain_controller = fxmlLoader.getController();
         subdomain_discovery_stage.setTitle(StringValues.ApplicationValues.MAIN_WINDOW_TITLE);
         subdomain_discovery_stage.setScene(subdomain_discovery_scene);
         StageManager.getInstance().createStage(StringValues.StageNames.DISCOVERY_SUBDOMAIN_STAGE,subdomain_discovery_stage,StringValues.SceneNames.DISCOVERY_SUBDOMAIN,discovery_subdomain_controller);
@@ -86,7 +84,7 @@ public class MainDashboardController implements ControllersParent{
         Stage start_proxy_stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.PROXY_START_VIEW_FXML));
         Scene start_proxy_scene = new Scene(fxmlLoader.load());
-        StartProxyViewController start_proxy_view_controller = fxmlLoader.getController();
+        StartProxyView start_proxy_view_controller = fxmlLoader.getController();
         start_proxy_stage.setTitle("Proxy Settings");
         start_proxy_stage.setScene(start_proxy_scene);
         StageManager.getInstance().createStage(StringValues.StageNames.PROXY_START_VIEW_STAGE,start_proxy_stage,StringValues.SceneNames.PROXY_START_VIEW_SCENE,start_proxy_view_controller);
@@ -121,7 +119,7 @@ public class MainDashboardController implements ControllersParent{
                     throw new RuntimeException(e);
                 }
 
-                RequestRootViewController requestRootViewController = fxmlLoader.getController();
+                RequestRootView requestRootViewController = fxmlLoader.getController();
                 requestRootViewController.setRequestModel(requestModel);
                 AnchorPane anchorPane = (AnchorPane) domainsTabPane.getTabs().get(tabIndex).getContent();
                 ScrollPane scrollPane = (ScrollPane) anchorPane.getChildren().get(0);
@@ -133,4 +131,21 @@ public class MainDashboardController implements ControllersParent{
         });
 
     }
+    @FXML
+    protected void openRepeater() throws IOException {
+        Stage repeater_stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.REPEATER_VIEW_FXML));
+        Scene repeater_scene = new Scene(fxmlLoader.load());
+        repeater_stage.setScene(repeater_scene);
+        repeater_stage.setTitle("Repeater");
+        isRepeaterOpen = true;
+        Repeater repeaterController = fxmlLoader.getController();
+        StageManager.getInstance().createStage(StringValues.StageNames.REPEATER_VIEW_STAGE,repeater_stage,StringValues.SceneNames.REPEATER_VIEW_SCENE,repeaterController);
+        repeater_stage.setOnCloseRequest(event -> {
+            StageManager.getInstance().closeStage(StringValues.StageNames.REPEATER_VIEW_STAGE);
+            isRepeaterOpen = false;
+        });
+        repeater_stage.show();
+    }
+
 }

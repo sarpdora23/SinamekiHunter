@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.DiscoverySubdomainViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.DiscoverySubdomainView">
    <children>
       <Label layoutX="124.0" layoutY="119.0" text="Target:" />
       <TextField fx:id="targetDomainTextField" layoutX="191.0" layoutY="115.0" prefHeight="25.0" prefWidth="254.0" />

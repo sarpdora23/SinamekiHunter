@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="219.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.StartProxyViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="219.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.StartProxyView">
    <children>
       <Label layoutX="79.0" layoutY="99.0" text="Port:" />
       <TextField fx:id="port_textfield" layoutX="112.0" layoutY="95.0" prefHeight="25.0" prefWidth="61.0" />

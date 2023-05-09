@@ -12,6 +12,7 @@ public class StringValues {
         public static final String DISCOVERY_RESULT_SCENE = "discovery_result_scene";
         public static final String PROXY_START_VIEW_SCENE = "proxy_start_view_scene";
         public static final String REQUEST_DETAIL_VIEW_SCENE = "request_detail_view_scene";
+        public static final String REPEATER_VIEW_SCENE = "repeater_view_scene";
     }
     public class StageNames{
         public static final String TARGET_INIT_STAGE = "target-init_stage";
@@ -20,6 +21,7 @@ public class StringValues {
         public static final String DISCOVERY_RESULT_VIEW_STAGE = "discovery-result-stage";
         public static final String PROXY_START_VIEW_STAGE = "start-proxy-stage";
         public static final String REQUEST_DETAIL_VIEW_STAGE = "request-detail-stage";
+        public static final String REPEATER_VIEW_STAGE = "repeater-stage";
     }
     public class FXMLNames{
         public static final String TARGET_INIT_FXML= "target-init-view.fxml";
@@ -31,6 +33,7 @@ public class StringValues {
         public static final String REQUEST_ROOT_VIEW_FXML= "request-root-view.fxml";
         public static final String PROXY_REQUEST_PARENT_VIEW = "proxy-request-parent-view.fxml";
         public static final String REQUEST_DETAIL_VIEW_FXML = "request-detail-view.fxml";
+        public static final String REPEATER_VIEW_FXML = "repeater-view.fxml";
     }
     public class NetworkValues{
         public static final String REQUEST_TYPE_GET = "GET";
@@ -43,6 +46,7 @@ public class StringValues {
         public static final String SUBDOMAIN_DISCOVERY_NAME = "Subdomain";
         public static final String REQUEST_TYPE_DISCOVERY = "Discovery";
         public static final String REQUEST_TYPE_PROXY = "Proxy";
+        public static final String REQUEST_TYPE_REPEATER = "Repeater";
     }
     public class VulnValues{
         public static final String LFI = "LFI";

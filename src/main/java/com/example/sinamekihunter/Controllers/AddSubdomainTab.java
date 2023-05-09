@@ -8,19 +8,14 @@ import com.example.sinamekihunter.Utils.StringValues;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class AddSubdomainTabController implements ControllersParent{
+public class AddSubdomainTab implements ControllersParent{
     public TabPane tabPane;
     @FXML
     private TextField newDomainTextField;
@@ -52,7 +47,7 @@ public class AddSubdomainTabController implements ControllersParent{
 
     }
     public static void addSubdomain(String url){
-        MainDashboardController mainDashboardController = (MainDashboardController) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
         TabPane tabPane = mainDashboardController.domainsTabPane;
         DomainModel domainModel = new DomainModel(url,tabPane.getTabs().size() - 1);
         TargetModel.getInstance().addDomainModel(domainModel);

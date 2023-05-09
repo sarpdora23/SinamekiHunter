@@ -1,5 +1,6 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.SinamekiApplication;
@@ -20,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.UUID;
 
-public class RequestRootViewController implements ControllersParent{
+public class RequestRootView implements ControllersParent{
     private RequestModel requestModel;
     @FXML
     private Label endpoint_label;
@@ -123,7 +124,7 @@ public class RequestRootViewController implements ControllersParent{
         Stage detail_stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.REQUEST_DETAIL_VIEW_FXML));
         Scene request_detail_scene = new Scene(fxmlLoader.load());
-        RequestDetailController requestDetailController = fxmlLoader.getController();
+        RequestDetail requestDetailController = fxmlLoader.getController();
         requestDetailController.setRequestModel(requestModel);
         detail_stage.setTitle("Request Detail");
         detail_stage.setScene(request_detail_scene);
@@ -138,8 +139,13 @@ public class RequestRootViewController implements ControllersParent{
         detail_stage.show();
     }
     @FXML
-    protected void sendRepater(){
-        //TODO REPATER'A GÖNDER
+    public void sendRepeater() throws IOException {
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        if (!mainDashboardController.isRepeaterOpen){
+            mainDashboardController.openRepeater();
+        }
+        Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
+        repeaterController.setRequest(requestModel.getRequestText());
     }
     @FXML
     protected void sendIntruder(){

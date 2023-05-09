@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane prefHeight="627.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.MainDashboardController">
+<Pane prefHeight="627.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.MainDashboard">
    <children>
       <Label layoutX="329.0" layoutY="37.0" text="Target:" />
       <TabPane fx:id="domainsTabPane" layoutY="64.0" prefHeight="564.0" prefWidth="763.0" tabClosingPolicy="UNAVAILABLE">
@@ -53,6 +53,11 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#startProxy" text="Proxy Start" />
                         <MenuItem mnemonicParsing="false" onAction="#stopProxy" text="Proxy Stop" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Repeater">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openRepeater" text="Open Repeater" />
                      </items>
                   </Menu>
               </menus>

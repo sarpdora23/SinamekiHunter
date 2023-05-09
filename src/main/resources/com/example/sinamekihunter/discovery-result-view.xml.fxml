@@ -10,7 +10,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.DiscoveryResultController">
+<Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.DiscoveryResult">
     <children>
         <Label fx:id="discovery_request_label" layoutX="228.0" layoutY="369.0" text="Label" />
         <Label layoutX="14.0" layoutY="14.0" text="Discovery Type:" />
@@ -23,6 +23,7 @@
             <ContextMenu>
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#addSubdomain" text="Add Subdomain" />
+                  <MenuItem mnemonicParsing="false" onAction="#sendRepeater" text="Send Repeater" />
               </items>
             </ContextMenu>
          </contextMenu></ListView>

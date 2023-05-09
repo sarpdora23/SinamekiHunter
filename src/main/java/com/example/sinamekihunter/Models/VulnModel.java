@@ -13,13 +13,7 @@ public class VulnModel {
     private String vuln_full_name;
     private ArrayList<PayloadRegex> payloadRegexes = new ArrayList<>();
     private ArrayList<String> methods = new ArrayList<>();
-    /*
-     public static final String LFI = "LFI";
-        public static final String SSRF = "SSRF";
-        public static final String SSTI = "SSTI";
-        public static final String OPEN_REDIRECT = "OPEN REDIRECT";
-        public static final String XSS = "XSS";
-     */
+
     private static VulnModel LFI;
     private static VulnModel SSRF = null;
     private static VulnModel SSTI = null;
@@ -42,7 +36,6 @@ public class VulnModel {
                     Pattern request_pattern = Pattern.compile(payloadRegex.getRequestTextPayload());
                     Matcher request_matcher = request_pattern.matcher(requestModel.getRequestText());
                     if (request_matcher.find()){
-                        System.out.println("Vulnerability FOUND!");
                         controlledVuln = new ControlledVuln(request_matcher.group(),true,this.vuln_name);
                         requestModel.addControlledVuln(controlledVuln);
                         requestModel.addPossibleVuln(this.vuln_name);

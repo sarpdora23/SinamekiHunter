@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<Pane prefHeight="494.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.AddSubdomainTabController">
+<Pane prefHeight="494.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.AddSubdomainTab">
    <children>
       <Label layoutX="228.0" layoutY="173.0" text="New Domain:" />
       <TextField fx:id="newDomainTextField" layoutX="312.0" layoutY="169.0" prefHeight="25.0" prefWidth="239.0" />

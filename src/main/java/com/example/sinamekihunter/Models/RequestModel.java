@@ -1,6 +1,7 @@
 package com.example.sinamekihunter.Models;
 
-import com.example.sinamekihunter.Controllers.DiscoveryResultController;
+import com.example.sinamekihunter.Controllers.DiscoveryResult;
+import com.example.sinamekihunter.Controllers.Repeater;
 import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
@@ -30,6 +31,10 @@ public class RequestModel extends Thread {
     private byte[] raw_data;
     private ArrayList<ControlledVuln> controlled_vulns = new ArrayList<>();
     private ArrayList<String> possible_vulns = new ArrayList<>();
+    private boolean isValid = true;
+    public RequestModel(){
+        this.isValid = false;
+    }
 
     public RequestModel(String url,RequestThreadModel requestThreadModel,String word,String request_method){
         this.url = url;
@@ -55,6 +60,21 @@ public class RequestModel extends Thread {
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_PROXY;
         this.id = UUID.randomUUID().toString();
         this.raw_data = raw_data;
+    }
+    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData,String request_text,String request_type){
+        this.url = url;
+        if (url.indexOf("http") == -1){
+            //TODO BURAYI DEGISTIR
+            this.url = header_data.get("Host")+url;
+            System.out.println("URL:"+this.url);
+        }
+        this.request_method = request_method;
+        this.header_data = header_data;
+        this.request_data = request_data;
+        this.isJsonData = isJsonData;
+        this.request_text = request_text;
+        this.request_type = request_type;
+        this.id = UUID.randomUUID().toString();
     }
     public byte[] getRaw_data(){return this.raw_data;}
     public HashMap getHeaderData(){
@@ -86,10 +106,9 @@ public class RequestModel extends Thread {
         this.header_data = header_data;
     }
     public void setResponse(ResponseModel responseModel) throws IOException {
-
         this.responseModel = responseModel;
         if(this.request_type == StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY){
-            DiscoveryResultController resultController = (DiscoveryResultController) ControllersManager.getInstance().getController(StringValues.SceneNames.DISCOVERY_RESULT_SCENE);
+            DiscoveryResult resultController = (DiscoveryResult) ControllersManager.getInstance().getController(StringValues.SceneNames.DISCOVERY_RESULT_SCENE);
             resultController.updateRequest(this);
         }
         else if (Objects.equals(this.request_type, StringValues.NetworkValues.REQUEST_TYPE_PROXY)){
@@ -98,6 +117,11 @@ public class RequestModel extends Thread {
             this.getSocketModel().finishedRequest();
             TargetModel.getInstance().checkProxyRequest(this);
         }
+        else if(Objects.equals(this.request_type,StringValues.NetworkValues.REQUEST_TYPE_REPEATER)){
+            Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
+            repeaterController.setResponse(this.responseModel.getContentString());
+        }
+
         System.out.println(this);
     }
     public void setSocketModel(SocketModel socketModel){
@@ -109,6 +133,12 @@ public class RequestModel extends Thread {
 
     public String getWord(){
         return this.word;
+    }
+    public boolean isValid(){
+        return this.isValid;
+    }
+    public void setValidation(boolean valid){
+        this.isValid = valid;
     }
     public void readTest(){
         System.out.println("Method:"+this.request_method);

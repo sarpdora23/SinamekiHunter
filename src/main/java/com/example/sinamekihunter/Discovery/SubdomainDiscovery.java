@@ -1,13 +1,10 @@
 package com.example.sinamekihunter.Discovery;
 
-import com.example.sinamekihunter.Controllers.DiscoverySubdomainViewController;
 import com.example.sinamekihunter.Managers.RequestManager;
-import com.example.sinamekihunter.Models.TargetModel;
 import com.example.sinamekihunter.Utils.StringValues;
 import org.apache.http.HttpHeaders;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 

@@ -1,33 +1,21 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.ResponseModel;
-import com.example.sinamekihunter.Utils.ColorValues;
+import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
 import com.example.sinamekihunter.Vulnerabilities.ControlledVuln;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.css.Selector;
-import javafx.css.Style;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.skin.TextAreaSkin;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 
+import java.io.IOException;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public class RequestDetailController implements ControllersParent{
+public class RequestDetail implements ControllersParent{
 
     @FXML
     private TextArea request_content_textarea;
@@ -50,6 +38,15 @@ public class RequestDetailController implements ControllersParent{
     @Override
     public void InitController() {
 
+    }
+    @FXML
+    protected void sendRepeater() throws IOException {
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        if (!mainDashboardController.isRepeaterOpen){
+            mainDashboardController.openRepeater();
+        }
+        Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
+        repeaterController.setRequest(requestModel.getRequestText());
     }
     public void setRequestModel(RequestModel requestModel){
         this.requestModel = requestModel;

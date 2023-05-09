@@ -11,18 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.apache.http.HttpHeaders;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class DiscoverySubdomainViewController implements ControllersParent{
+public class DiscoverySubdomainView implements ControllersParent{
     @FXML
     private TextField targetDomainTextField;
     @FXML

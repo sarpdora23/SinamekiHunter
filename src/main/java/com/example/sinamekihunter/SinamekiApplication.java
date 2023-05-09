@@ -1,30 +1,16 @@
 package com.example.sinamekihunter;
 
 import com.example.sinamekihunter.Controllers.ControllersParent;
-import com.example.sinamekihunter.Controllers.TargetInitController;
 import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Managers.StageManager;
-import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.VulnModel;
-import com.example.sinamekihunter.Network.Proxy;
-import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
-import com.example.sinamekihunter.Utils.URLParseFunctions;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilterOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

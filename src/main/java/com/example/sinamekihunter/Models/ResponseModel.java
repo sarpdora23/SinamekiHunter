@@ -1,17 +1,30 @@
 package com.example.sinamekihunter.Models;
 
+import org.apache.http.Header;
+import org.apache.http.client.methods.CloseableHttpResponse;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 public class ResponseModel {
     private String word;
     private int statusCode;
     private String message;
     private byte[] content;
     private int contentLength;
-    public ResponseModel(String word,int statusCode,String message,byte[] content){
+    private RequestModel requestModel;
+    private CloseableHttpResponse raw_response;
+    public ResponseModel(String word, int statusCode, String message, byte[] content, RequestModel requestModel, CloseableHttpResponse raw_response){
         this.word = word;
         this.statusCode = statusCode;
         this.message = message;
         this.content = content;
         this.contentLength = new String(content).length();
+        this.requestModel = requestModel;
+        this.raw_response = raw_response;
+    }
+    public ResponseModel(){
+        this.content = "Request is not valid.".getBytes(StandardCharsets.UTF_8);
     }
     public int getStatusCode() {
         return statusCode;
@@ -23,11 +36,31 @@ public class ResponseModel {
     }
 
     public String getContentString() {
-        return new String(content);
-    }
+        try{
+            return new String(getContent());
+        }catch (IOException exception){
 
-    public byte[] getContent() {
-        return content;
+        }
+        return "";
+    }
+    public RequestModel getRequestModel(){return this.requestModel;}
+    public byte[] getContent() throws IOException {
+        String content_string = "";
+        content_string  = content_string +raw_response.getProtocolVersion()+" "+
+                raw_response.getStatusLine().getStatusCode() + " " + raw_response.getStatusLine().getReasonPhrase()+"\r\n";
+        Header[] all_headers = this.raw_response.getAllHeaders();
+        for (Header header:all_headers) {
+            if (!header.getName().equals("Transfer-Encoding")){
+                content_string = content_string + header.getName() + ": " + header.getValue() + "\r\n";
+            }
+        }
+        content_string = content_string + "Content-Length" + ": " + getContentLength() + "\r\n";
+        content_string = content_string + "\n";
+        byte[] content_header = content_string.getBytes();
+        byte[] result = new byte[content_header.length + content.length];
+        System.arraycopy(content_header, 0, result, 0, content_header.length);
+        System.arraycopy(content, 0, result, content_header.length, content.length);
+        return result;
     }
 
     public String getStatusMessage() {

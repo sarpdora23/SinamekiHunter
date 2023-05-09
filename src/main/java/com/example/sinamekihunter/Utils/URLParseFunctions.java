@@ -48,7 +48,10 @@ public class URLParseFunctions {
             String[] params = paramsPart.split("&");
             for (String paramValue: params) {
                 String[] param_value = paramValue.split("=");
-                requestParams.put(param_value[0],URLDecoder.decode(param_value[1], Charset.defaultCharset()));
+                if (param_value.length >= 2){
+                    requestParams.put(param_value[0],URLDecoder.decode(param_value[1], Charset.defaultCharset()));
+                }
+
             }
 
             return requestParams;

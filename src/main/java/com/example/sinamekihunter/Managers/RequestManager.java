@@ -1,18 +1,15 @@
 package com.example.sinamekihunter.Managers;
 
-import com.example.sinamekihunter.Controllers.DiscoveryResultController;
+import com.example.sinamekihunter.Controllers.DiscoveryResult;
 import com.example.sinamekihunter.Models.RequestThreadModel;
-import com.example.sinamekihunter.Models.TargetModel;
 import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.DiscoverThread;
 import com.example.sinamekihunter.Utils.StringValues;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -42,7 +39,7 @@ public class RequestManager {
         Scene resultViewScene = new Scene(resultViewFXML.load());
         resultStage.setScene(resultViewScene);
         resultStage.setTitle(StringValues.ApplicationValues.MAIN_WINDOW_TITLE);
-        DiscoveryResultController resultController = resultViewFXML.getController();
+        DiscoveryResult resultController = resultViewFXML.getController();
         resultController.setDiscoverThread(discoverThread,newThread);
         StageManager.getInstance().createStage(StringValues.StageNames.DISCOVERY_RESULT_VIEW_STAGE,resultStage,StringValues.SceneNames.DISCOVERY_RESULT_SCENE,resultController);
         resultStage.setOnCloseRequest(event -> {

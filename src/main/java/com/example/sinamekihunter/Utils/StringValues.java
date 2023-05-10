@@ -47,6 +47,9 @@ public class StringValues {
         public static final String REQUEST_TYPE_DISCOVERY = "Discovery";
         public static final String REQUEST_TYPE_PROXY = "Proxy";
         public static final String REQUEST_TYPE_REPEATER = "Repeater";
+        public static final String PARAMETER_TYPE_BODY = "BODY";
+        public static final String PARAMETER_TYPE_JSON = "JSON";
+        public static final String PARAMETER_TYPE_XML = "XML";
     }
     public class VulnValues{
         public static final String LFI = "LFI";

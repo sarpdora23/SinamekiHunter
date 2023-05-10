@@ -33,8 +33,10 @@ public class ProxyThread extends Thread{
                     socketModel.finishedRequest();
                 }
                 else{
+                    System.out.println(request);
                     RequestModel requestModel = NetworkFunctions.stringToRequestModel(request,outputStream,inputStream);
                     requestModel.setSocketModel(socketModel);
+                    System.out.println("FLAG 5");
                     NetworkFunctions.sendRequest(requestModel);
                 }
 

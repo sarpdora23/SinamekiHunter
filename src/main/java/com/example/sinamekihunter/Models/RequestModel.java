@@ -21,7 +21,7 @@ public class RequestModel extends Thread {
     private String request_text;
     private String word;
     private String url;
-    public boolean isJsonData = false;
+    public String parameterType = StringValues.NetworkValues.PARAMETER_TYPE_BODY;
     public ResponseModel responseModel;
     private String request_method;
     private String request_type;
@@ -44,7 +44,7 @@ public class RequestModel extends Thread {
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_DISCOVERY;
         this.id = UUID.randomUUID().toString();
     }
-    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData,String request_text, OutputStream outputStream,byte[] raw_data){
+    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, String parameterType,String request_text, OutputStream outputStream,byte[] raw_data){
         this.url = url;
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
@@ -55,13 +55,13 @@ public class RequestModel extends Thread {
         this.request_method = request_method;
         this.header_data = header_data;
         this.request_data = request_data;
-        this.isJsonData = isJsonData;
+        this.parameterType = parameterType;
         this.request_text = request_text;
         this.request_type = StringValues.NetworkValues.REQUEST_TYPE_PROXY;
         this.id = UUID.randomUUID().toString();
         this.raw_data = raw_data;
     }
-    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, Boolean isJsonData,String request_text,String request_type){
+    public RequestModel(String url, String request_method, HashMap header_data, HashMap request_data, String parameterType,String request_text,String request_type){
         this.url = url;
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
@@ -71,7 +71,7 @@ public class RequestModel extends Thread {
         this.request_method = request_method;
         this.header_data = header_data;
         this.request_data = request_data;
-        this.isJsonData = isJsonData;
+        this.parameterType = parameterType;
         this.request_text = request_text;
         this.request_type = request_type;
         this.id = UUID.randomUUID().toString();
@@ -140,24 +140,6 @@ public class RequestModel extends Thread {
     public void setValidation(boolean valid){
         this.isValid = valid;
     }
-    public void readTest(){
-        System.out.println("Method:"+this.request_method);
-        System.out.println("Endpoint:"+this.url);
-        System.out.println("-----Headers-----");
-        for (Object key:header_data.keySet()) {
-            System.out.println(key+"=>"+header_data.get(key));
-        }
-        System.out.println("-----Body-----");
-        for (Object key: request_data.keySet()) {
-            System.out.println(key+"=>"+ request_data.get(key));
-        }
-        if (this.isJsonData){
-            System.out.println("-----Json-----");
-            for (Object key:json_data.keySet()) {
-                System.out.println(key+"=>"+json_data.get(key));
-            }
-        }
-    }
     private void updateGetRequestUrl(){
         if (getRequest_method() == StringValues.NetworkValues.REQUEST_TYPE_GET && getRequestData().keySet().size() != 0){
             String endpoint = url.substring(0,url.indexOf('?'));
@@ -168,6 +150,7 @@ public class RequestModel extends Thread {
     public String toString(){
         return this.url + ":" + this.responseModel.getStatusCode();
     }
+    public String getParameterType(){return this.parameterType;}
     @Override
     public void run(){
         try {

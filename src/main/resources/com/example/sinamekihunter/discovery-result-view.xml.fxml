@@ -24,6 +24,7 @@
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#addSubdomain" text="Add Subdomain" />
                   <MenuItem mnemonicParsing="false" onAction="#sendRepeater" text="Send Repeater" />
+                  <MenuItem mnemonicParsing="false" onAction="#showDetails" text="Show Details" />
               </items>
             </ContextMenu>
          </contextMenu></ListView>

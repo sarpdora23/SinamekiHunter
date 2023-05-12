@@ -151,6 +151,7 @@ public class RequestModel extends Thread {
         return this.url + ":" + this.responseModel.getStatusCode();
     }
     public String getParameterType(){return this.parameterType;}
+    public void setRequestText(String requestText){this.request_text = requestText;}
     @Override
     public void run(){
         try {

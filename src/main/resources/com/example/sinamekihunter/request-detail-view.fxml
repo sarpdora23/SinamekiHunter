@@ -34,6 +34,7 @@
                               <ContextMenu>
                                 <items>
                                   <MenuItem mnemonicParsing="false" onAction="#sendRepeater" text="Send Repeater" />
+                                    <MenuItem mnemonicParsing="false" onAction="#sendIntruder" text="Send Intruder" />
                                 </items>
                               </ContextMenu>
                            </contextMenu></TextArea>

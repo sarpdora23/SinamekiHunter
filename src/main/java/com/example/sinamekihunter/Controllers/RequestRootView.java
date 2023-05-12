@@ -125,7 +125,7 @@ public class RequestRootView implements ControllersParent{
         FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.REQUEST_DETAIL_VIEW_FXML));
         Scene request_detail_scene = new Scene(fxmlLoader.load());
         RequestDetail requestDetailController = fxmlLoader.getController();
-        requestDetailController.setRequestModel(requestModel);
+        requestDetailController.setRequestModel(requestModel,false);
         detail_stage.setTitle("Request Detail");
         detail_stage.setScene(request_detail_scene);
         String stage_uid = UUID.randomUUID().toString();
@@ -148,7 +148,12 @@ public class RequestRootView implements ControllersParent{
         repeaterController.setRequest(requestModel.getRequestText());
     }
     @FXML
-    protected void sendIntruder(){
-        //TODO INTRUDER'A GÖNDER
+    protected void sendIntruder() throws IOException {
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        if (!mainDashboardController.isIntruderOpen){
+            mainDashboardController.openIntruder();
+        }
+        Intruder intruderController = (Intruder) ControllersManager.getInstance().getController(StringValues.SceneNames.INTRUDER_VIEW_SCENE);
+        intruderController.setRequest(requestModel.getRequestText());
     }
 }

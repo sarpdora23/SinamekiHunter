@@ -1,10 +1,12 @@
 package com.example.sinamekihunter.Controllers;
 
 import com.example.sinamekihunter.Managers.ControllersManager;
+import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.RequestThreadModel;
 import com.example.sinamekihunter.Models.ResponseModel;
 import com.example.sinamekihunter.Models.TargetModel;
+import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.DiscoverThread;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
@@ -14,14 +16,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class DiscoveryResult implements ControllersParent {
     private DiscoverThread discoverThread;
@@ -48,6 +51,7 @@ public class DiscoveryResult implements ControllersParent {
     private ToggleButton orderMinMax;
     @FXML
     private ChoiceBox statusCodeFilterChoiceBox;
+    private HashMap<ResponseModel,RequestModel> responseToRequestMap = new HashMap<>();
     private boolean isFiltered = false;
     private int filteredValue;
 
@@ -105,6 +109,7 @@ public class DiscoveryResult implements ControllersParent {
         int completedRequest = this.requestThreadModel.getCompletedRequestCounter();
         String progress_string = completedRequest + "/" + totalWordCount;
         ResponseModel responseModel = requestModel.getResponse();
+        responseToRequestMap.put(responseModel,requestModel);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -177,7 +182,28 @@ public class DiscoveryResult implements ControllersParent {
         Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
         ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
         System.out.println("FLAG:"+selectedResponse.getRequestModel());
-        repeaterController.setRequest(NetworkFunctions.requestModelToString(selectedResponse.getRequestModel()));
+        repeaterController.setRequest(NetworkFunctions.requestModelToString(responseToRequestMap.get(selectedResponse)));
+    }
+    @FXML
+    protected void showDetails() throws IOException {
+        Stage detail_stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.REQUEST_DETAIL_VIEW_FXML));
+        Scene request_detail_scene = new Scene(fxmlLoader.load());
+        RequestDetail requestDetailController = fxmlLoader.getController();
+        ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
+        requestDetailController.setRequestModel(responseToRequestMap.get(selectedResponse),true);
+        System.out.println("REQUEST TEXT: " + responseToRequestMap.get(selectedResponse));
+        detail_stage.setTitle("Request Detail");
+        detail_stage.setScene(request_detail_scene);
+        String stage_uid = UUID.randomUUID().toString();
+        StageManager.getInstance().createStage(StringValues.StageNames.REQUEST_DETAIL_VIEW_STAGE +stage_uid,
+                detail_stage,
+                StringValues.SceneNames.REQUEST_DETAIL_VIEW_SCENE + stage_uid,
+                requestDetailController);
+        detail_stage.setOnCloseRequest(event -> {
+            StageManager.getInstance().closeStage(StringValues.StageNames.REQUEST_DETAIL_VIEW_STAGE + stage_uid);
+        });
+        detail_stage.show();
     }
 }
 

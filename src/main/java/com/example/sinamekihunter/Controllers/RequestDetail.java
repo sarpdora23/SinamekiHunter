@@ -48,11 +48,28 @@ public class RequestDetail implements ControllersParent{
         Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
         repeaterController.setRequest(requestModel.getRequestText());
     }
-    public void setRequestModel(RequestModel requestModel){
+    @FXML
+    protected void sendIntruder() throws IOException {
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        if (!mainDashboardController.isIntruderOpen){
+            mainDashboardController.openIntruder();
+        }
+        Intruder intruderController = (Intruder) ControllersManager.getInstance().getController(StringValues.SceneNames.INTRUDER_VIEW_SCENE);
+        intruderController.setRequest(requestModel.getRequestText());
+    }
+    public void setRequestModel(RequestModel requestModel,boolean isRequestString){
+
         this.requestModel = requestModel;
         this.responseModel = requestModel.getResponse();
-        request_content_textarea.setText(this.requestModel.getRequestText());
-        response_content_textarea.setText(this.responseModel.getContentString());
+        if (isRequestString){
+            request_content_textarea.setText(NetworkFunctions.requestModelToString(requestModel));
+            response_content_textarea.setText(this.responseModel.getContentString());
+            requestModel.setRequestText(NetworkFunctions.requestModelToString(requestModel));
+        }else{
+            request_content_textarea.setText(this.requestModel.getRequestText());
+            response_content_textarea.setText(this.responseModel.getContentString());
+        }
+
         response_webview.getEngine().loadContent(this.responseModel.getContentString());
         response_raw_toggle_button.setSelected(true);
         response_raw_toggle_button.selectedProperty().addListener((observable,oldValue,newValue)->{

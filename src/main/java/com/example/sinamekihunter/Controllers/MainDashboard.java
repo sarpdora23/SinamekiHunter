@@ -31,6 +31,7 @@ public class MainDashboard implements ControllersParent{
     public TabPane domainsTabPane;
     private HashMap<Integer, ObservableList> tabRequestsMap;
     public boolean isRepeaterOpen = false;
+    public boolean isIntruderOpen = false;
     @FXML
     protected void createAddSubdomainTab(){
         Tab addSubdomain = new Tab("+");
@@ -147,5 +148,21 @@ public class MainDashboard implements ControllersParent{
         });
         repeater_stage.show();
     }
-
+    @FXML
+    protected void openIntruder() throws IOException {
+        Stage intruder_stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.INTRUDER_VIEW_FXML));
+        Scene intruder_scene = new Scene(fxmlLoader.load());
+        intruder_stage.setScene(intruder_scene);
+        intruder_stage.setTitle("Intruder");
+        isIntruderOpen = true;
+        Intruder intruderController = fxmlLoader.getController();
+        StageManager.getInstance().createStage(StringValues.StageNames.INTRUDER_VIEW_STAGE,intruder_stage,
+                StringValues.SceneNames.INTRUDER_VIEW_SCENE,intruderController);
+        intruder_stage.setOnCloseRequest(event -> {
+            StageManager.getInstance().closeStage(StringValues.StageNames.INTRUDER_VIEW_STAGE);
+            isIntruderOpen = false;
+        });
+        intruder_stage.show();
+    }
 }

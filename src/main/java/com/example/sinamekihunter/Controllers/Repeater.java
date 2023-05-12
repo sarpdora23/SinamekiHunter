@@ -1,5 +1,6 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Managers.ControllersManager;
 import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
@@ -19,7 +20,8 @@ public class Repeater implements ControllersParent{
 
     }
 
-    public void setRequest(String requestText){
+    public void setRequest(String requestText)
+    {
         requestTextArea.setText(requestText);
     }
     @FXML
@@ -27,6 +29,15 @@ public class Repeater implements ControllersParent{
         String requestText = requestTextArea.getText();
         RequestModel requestModel = NetworkFunctions.stringToRequestModel(requestText, StringValues.NetworkValues.REQUEST_TYPE_REPEATER);
         NetworkFunctions.sendRequest(requestModel);
+    }
+    @FXML
+    protected void sendIntruder() throws IOException {
+        MainDashboard mainDashboardController = (MainDashboard) ControllersManager.getInstance().getController(StringValues.SceneNames.MAIN_DASHBOARD_SCENE);
+        if (!mainDashboardController.isIntruderOpen){
+            mainDashboardController.openIntruder();
+        }
+        Intruder intruderController = (Intruder) ControllersManager.getInstance().getController(StringValues.SceneNames.INTRUDER_VIEW_SCENE);
+        intruderController.setRequest(requestTextArea.getText());
     }
     public void setResponse(String responseText){
         responseTextArea.setText(responseText);

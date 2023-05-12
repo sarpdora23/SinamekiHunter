@@ -60,6 +60,11 @@
                         <MenuItem mnemonicParsing="false" onAction="#openRepeater" text="Open Repeater" />
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Intruder">
+                      <items>
+                          <MenuItem mnemonicParsing="false" onAction="#openIntruder" text="Open Intruder" />
+                      </items>
+                  </Menu>
               </menus>
             </MenuBar>
          </children>

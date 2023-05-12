@@ -29,7 +29,7 @@ public class NetworkFunctions {
             HttpClientBuilder httpClientBuilder;
             RequestConfig config;
             if(requestModel.getRequestType() == StringValues.NetworkValues.REQUEST_TYPE_PROXY){
-                httpClientBuilder = HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).addInterceptorFirst(
+                httpClientBuilder = HttpClients.custom().addInterceptorFirst(
                         new HttpRequestInterceptor() {
                             @Override
                             public void process(HttpRequest request, HttpContext httpContext) throws HttpException, IOException {

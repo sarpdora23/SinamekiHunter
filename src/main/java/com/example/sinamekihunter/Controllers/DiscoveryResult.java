@@ -52,16 +52,20 @@ public class DiscoveryResult implements ControllersParent {
     @FXML
     private ChoiceBox statusCodeFilterChoiceBox;
     private HashMap<ResponseModel,RequestModel> responseToRequestMap = new HashMap<>();
+    public boolean enableInit = true;
     private boolean isFiltered = false;
     private int filteredValue;
+    private int compReq = 0;
 
     @Override
     public void InitController() {
-        this.discovery_type_label.setText(this.requestThreadModel.getThreadName());
-        discovery_request_label.setText("Current Request: ");
-        totalWordCount = getTotalWordCount();
-        discovery_progress_label.setText("0/"+totalWordCount);
-        discoverThread.start();
+        if (this.enableInit){
+            this.discovery_type_label.setText(this.requestThreadModel.getThreadName());
+            discovery_request_label.setText("Current Request: ");
+            totalWordCount = getTotalWordCount();
+            discovery_progress_label.setText("0/"+totalWordCount);
+            discoverThread.start();
+        }
         responseModels = FXCollections.observableArrayList();
         statusCodesList = FXCollections.observableArrayList();
         displayResponseModelList = new ArrayList<>();
@@ -76,7 +80,6 @@ public class DiscoveryResult implements ControllersParent {
         statusCodeFilterChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                System.out.println("Value:" + statusCodesList.get(t1.intValue()));
                 isFiltered = true;
                 filteredValue = statusCodesList.get(t1.intValue());
                 filterList(filteredValue);
@@ -87,11 +90,20 @@ public class DiscoveryResult implements ControllersParent {
         this.discoverThread = discoverThread;
         this.requestThreadModel = requestThreadModel;
     }
-
+    public void InitIntruderResult(int totalWordCount){
+        this.totalWordCount = totalWordCount;
+        this.discovery_type_label.setText("Intruder");
+        enableInit = false;
+    }
     @FXML
     protected void stopDiscovery(){
-        System.out.println("Discovery Stopping");
-        this.discoverThread.interrupt();
+        if (enableInit){
+            this.discoverThread.interrupt();
+        }
+        else{
+            Intruder intruder = (Intruder) ControllersManager.getInstance().getController(StringValues.SceneNames.INTRUDER_VIEW_SCENE);
+            intruder.intruderType.setStopped(true);
+        }
     }
     private int getTotalWordCount(){
         int satirSayisi = 0;
@@ -135,6 +147,37 @@ public class DiscoveryResult implements ControllersParent {
             }
         });
 
+    }
+    public void updateIntruderRequest(RequestModel requestModel){
+        compReq++;
+        int completedRequest = compReq;
+        String progress_string = completedRequest + "/" + totalWordCount;
+        ResponseModel responseModel = requestModel.getResponse();
+        responseToRequestMap.put(responseModel,requestModel);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                discovery_progress_label.setText(progress_string);
+                discovery_progressbar.setProgress((double) completedRequest / totalWordCount);
+                discovery_request_label.setText("Current Request: "+requestModel.getWord());
+                if(String.valueOf(responseModel.getStatusCode()).substring(0,1) != "4"){
+                    displayResponseModelList.add(responseModel);
+                    if (isFiltered){
+                        if (responseModel.getStatusCode() == filteredValue){
+                            responseModels.add(responseModel);
+                        }
+                    }
+                    else{
+                        responseModels.add(responseModel);
+                    }
+                    if (statusCodesList.indexOf(responseModel.getStatusCode()) == -1){
+                        statusCodesList.add(responseModel.getStatusCode());
+                    }
+                    orderList();
+                }
+
+            }
+        });
     }
     public void orderList(){
         Comparator<ResponseModel> comparator;
@@ -181,7 +224,6 @@ public class DiscoveryResult implements ControllersParent {
         }
         Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
         ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
-        System.out.println("FLAG:"+selectedResponse.getRequestModel());
         repeaterController.setRequest(NetworkFunctions.requestModelToString(responseToRequestMap.get(selectedResponse)));
     }
     @FXML
@@ -192,7 +234,6 @@ public class DiscoveryResult implements ControllersParent {
         RequestDetail requestDetailController = fxmlLoader.getController();
         ResponseModel selectedResponse = (ResponseModel) discovery_result_listview.getSelectionModel().getSelectedItems().get(0);
         requestDetailController.setRequestModel(responseToRequestMap.get(selectedResponse),true);
-        System.out.println("REQUEST TEXT: " + responseToRequestMap.get(selectedResponse));
         detail_stage.setTitle("Request Detail");
         detail_stage.setScene(request_detail_scene);
         String stage_uid = UUID.randomUUID().toString();

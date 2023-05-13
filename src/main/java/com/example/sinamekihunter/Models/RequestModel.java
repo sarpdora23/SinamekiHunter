@@ -66,7 +66,7 @@ public class RequestModel extends Thread {
         if (url.indexOf("http") == -1){
             //TODO BURAYI DEGISTIR
             this.url = header_data.get("Host")+url;
-            System.out.println("URL:"+this.url);
+
         }
         this.request_method = request_method;
         this.header_data = header_data;
@@ -120,9 +120,11 @@ public class RequestModel extends Thread {
         else if(Objects.equals(this.request_type,StringValues.NetworkValues.REQUEST_TYPE_REPEATER)){
             Repeater repeaterController = (Repeater) ControllersManager.getInstance().getController(StringValues.SceneNames.REPEATER_VIEW_SCENE);
             repeaterController.setResponse(this.responseModel.getContentString());
+        } else if (Objects.equals(this.request_type,StringValues.NetworkValues.REQUEST_TYPE_INTRUDER)) {
+            DiscoveryResult resultController = (DiscoveryResult) ControllersManager.getInstance().getController(StringValues.SceneNames.DISCOVERY_RESULT_SCENE);
+            resultController.updateIntruderRequest(this);
         }
 
-        System.out.println(this);
     }
     public void setSocketModel(SocketModel socketModel){
         this.socketModel = socketModel;
@@ -130,7 +132,7 @@ public class RequestModel extends Thread {
     public void setRequestMethod(String request_method){
         this.request_method = request_method;
     }
-
+    public void setWord(String word){this.word = word;}
     public String getWord(){
         return this.word;
     }
@@ -155,7 +157,7 @@ public class RequestModel extends Thread {
     @Override
     public void run(){
         try {
-            System.out.println("Header Host:" + header_data.get(HttpHeaders.HOST));
+
             NetworkFunctions.sendRequest(this);
         } catch (IOException e) {
             throw new RuntimeException(e);

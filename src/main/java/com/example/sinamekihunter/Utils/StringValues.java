@@ -37,6 +37,7 @@ public class StringValues {
         public static final String REQUEST_DETAIL_VIEW_FXML = "request-detail-view.fxml";
         public static final String REPEATER_VIEW_FXML = "repeater-view.fxml";
         public static final String INTRUDER_VIEW_FXML = "intruder-view.fxml";
+        public static final String SNIPER_VIEW_FXML = "sniper-view.fxml";
     }
     public class NetworkValues{
         public static final String REQUEST_TYPE_GET = "GET";
@@ -47,9 +48,11 @@ public class StringValues {
         public static final String REQUEST_TYPE_OPTIONS = "OPTIONS";
         public static final String FUZZ_PARAM_VALUE = "FUZZ";
         public static final String SUBDOMAIN_DISCOVERY_NAME = "Subdomain";
+        public static final String INTRUDER_NAME = "Intruder";
         public static final String REQUEST_TYPE_DISCOVERY = "Discovery";
         public static final String REQUEST_TYPE_PROXY = "Proxy";
         public static final String REQUEST_TYPE_REPEATER = "Repeater";
+        public static final String REQUEST_TYPE_INTRUDER = "Intruder";
         public static final String PARAMETER_TYPE_BODY = "BODY";
         public static final String PARAMETER_TYPE_JSON = "JSON";
         public static final String PARAMETER_TYPE_XML = "XML";
@@ -60,5 +63,11 @@ public class StringValues {
         public static final String SSTI = "SSTI";
         public static final String OPEN_REDIRECT = "OPEN REDIRECT";
         public static final String XSS = "XSS";
+    }
+    public class IntruderTypes{
+        public static final String SNIPER = "Sniper";
+        public static final String BATTERING_RAM = "Battering Ram";
+        public static final String PITCHFORK = "Pitchfork";
+        public static final String CLUSTERBOMB = "Clusterbomb";
     }
 }

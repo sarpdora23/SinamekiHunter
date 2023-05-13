@@ -1,6 +1,7 @@
 package com.example.sinamekihunter.Utils;
 
 import com.example.sinamekihunter.Managers.RequestManager;
+import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.RequestThreadModel;
 
 import java.io.FileNotFoundException;

@@ -1,6 +1,7 @@
 package com.example.sinamekihunter.Managers;
 
 import com.example.sinamekihunter.Controllers.DiscoveryResult;
+import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.Models.RequestThreadModel;
 import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.DiscoverThread;
@@ -48,5 +49,6 @@ public class RequestManager {
         resultStage.show();
 
     }
+
 }
 

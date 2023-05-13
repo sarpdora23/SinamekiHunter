@@ -1,47 +1,100 @@
 package com.example.sinamekihunter.Controllers;
 
+import com.example.sinamekihunter.Managers.RequestManager;
+import com.example.sinamekihunter.Managers.StageManager;
 import com.example.sinamekihunter.Models.RequestModel;
+import com.example.sinamekihunter.SinamekiApplication;
+import com.example.sinamekihunter.Utils.NetworkFunctions;
+import com.example.sinamekihunter.Utils.StringValues;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Intruder implements ControllersParent{
     @FXML
     private TextArea requestTextArea;
-    @FXML
-    private Label wordListNameLabel;
-    @FXML
-    private ListView wordsListView;
+
     @FXML
     private ChoiceBox fuzzTypeChoiceBox;
     @FXML
     private Label speedLabel;
-    private String attackType;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private Slider speedSlider;
+    private boolean isFuzzParam = false;
+    @FXML
+    private Pane typePane;
+    private int speed = 1;
+
+    public IntruderType intruderType;
     public void setRequest(String requestText){
         requestTextArea.setText(requestText);
     }
     @Override
     public void InitController() {
         ArrayList typeList = new ArrayList<>();
-        typeList.add("Sniper");
-        typeList.add("Battering Ram");
-        typeList.add("Pitchfork");
-        typeList.add("Clusterbomb");
+        typeList.add(StringValues.IntruderTypes.SNIPER);
+        typeList.add(StringValues.IntruderTypes.BATTERING_RAM);
+        typeList.add(StringValues.IntruderTypes.CLUSTERBOMB);
+        typeList.add(StringValues.IntruderTypes.PITCHFORK);
         fuzzTypeChoiceBox.setItems(FXCollections.observableList(typeList));
         fuzzTypeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
         {
-            System.out.println(newValue);
+            if (Objects.equals(newValue,StringValues.IntruderTypes.SNIPER)){
+                FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.SNIPER_VIEW_FXML));
+                try {
+                    this.typePane.getChildren().clear();
+                    this.typePane.getChildren().add(fxmlLoader.load());
+                    this.intruderType = fxmlLoader.getController();
+                    this.intruderType.initIntruder();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }else if (Objects.equals(newValue,StringValues.IntruderTypes.BATTERING_RAM)){
+                this.typePane.getChildren().clear();
+            } else if (Objects.equals(newValue,StringValues.IntruderTypes.PITCHFORK)) {
+                this.typePane.getChildren().clear();
+            } else if (Objects.equals(newValue,StringValues.IntruderTypes.CLUSTERBOMB)) {
+                this.typePane.getChildren().clear();
+            }
+        });
+        speedSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            speedLabel.setText(String.valueOf(newValue.intValue()));
+            speed = newValue.intValue();
+            speedSlider.setValue(newValue.intValue());
+            this.intruderType.setSpeed(speed);
         });
     }
     @FXML
     protected void addFuzzParam(){
-        String requestText = requestTextArea.getText();
-        IndexRange selectionRange = requestTextArea.getSelection();
-        String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ" + requestText.substring(selectionRange.getEnd());
-        requestTextArea.setText(newRequestText);
+        if (!isFuzzParam){
+            String requestText = requestTextArea.getText();
+            IndexRange selectionRange = requestTextArea.getSelection();
+            String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ" + requestText.substring(selectionRange.getEnd());
+            requestTextArea.setText(newRequestText);
+            isFuzzParam = true;
+        }
+        else {
+            String requestText = requestTextArea.getText();
+            requestText = requestText.replace("FUZZ","");
+            IndexRange selectionRange = requestTextArea.getSelection();
+            String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ" + requestText.substring(selectionRange.getEnd());
+            requestTextArea.setText(newRequestText);
+            isFuzzParam = true;
+        }
+
     }
     @FXML
     protected void deleteFuzzParam(){
@@ -49,16 +102,54 @@ public class Intruder implements ControllersParent{
         if (requestText.indexOf("FUZZ") != -1){
             String newRequestText = requestText.replace("FUZZ","");
             requestTextArea.setText(newRequestText);
+            isFuzzParam = false;
         }
 
     }
     @FXML
-    protected void selectWordList(){
-
+    protected void startFuzzing() throws IOException {
+        if (isFuzzParam && intruderType.getWordlist() != null){
+            if (!intruderType.getIsRunning()){
+                intruderType.setRunning(true);
+                intruderType.setStopped(false);
+                Stage resultStage = new Stage();
+                FXMLLoader resultViewFXML = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.DISCOVERY_RESULT_VIEW_FXML));
+                Scene resultViewScene = new Scene(resultViewFXML.load());
+                resultStage.setScene(resultViewScene);
+                resultStage.setTitle(StringValues.ApplicationValues.MAIN_WINDOW_TITLE);
+                DiscoveryResult discoveryResult = resultViewFXML.getController();
+                discoveryResult.InitIntruderResult(intruderType.getTotalWordCount());
+                StageManager.getInstance().createStage(StringValues.StageNames.DISCOVERY_RESULT_VIEW_STAGE,resultStage,StringValues.SceneNames.DISCOVERY_RESULT_SCENE,discoveryResult);
+                resultStage.setOnCloseRequest(event -> {
+                    if (intruderType.getIsRunning()){
+                        runningError(true);
+                        intruderType.setStopped(true);
+                    }
+                    StageManager.getInstance().closeStage(StringValues.StageNames.DISCOVERY_RESULT_VIEW_STAGE);
+                });
+                resultStage.show();
+                intruderType.fuzz(requestTextArea.getText());
+            }
+            else {
+                runningError(false);
+            }
+        }
+        else {
+            errorLabel.setText("You must select wordlist and FUZZ part.");
+        }
     }
-    @FXML
-    protected void startFuzzing(){
-
+    private void runningError(boolean isStopped){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Intruder");
+        alert.setHeaderText("Intruder Alert");
+        if (isStopped){
+            alert.setContentText("Current Fuzzing process will stop.");
+            intruderType.setStopped(true);
+            intruderType.setRunning(false);
+        }
+        else{
+            alert.setContentText("Intruder is running! You must stop current process before run new one!");
+        }
+        alert.showAndWait();
     }
-
 }

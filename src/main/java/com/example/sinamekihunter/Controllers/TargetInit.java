@@ -36,9 +36,11 @@ public class TargetInit implements ControllersParent{
             Stage stage = new Stage();
             Scene main_scene = new Scene(fxmlLoader.load());
             MainDashboard mainDashboard = fxmlLoader.getController();
+            stage.setTitle("Sinameki Hunter");
             stage.setScene(main_scene);
             StageManager.getInstance().createStage(StringValues.StageNames.MAIN_DASHBOARD_STAGE,
                     stage,StringValues.SceneNames.MAIN_DASHBOARD_SCENE,mainDashboard);
+            StageManager.getInstance().closeStage(StringValues.StageNames.TARGET_INIT_STAGE);
 
         }
         else{

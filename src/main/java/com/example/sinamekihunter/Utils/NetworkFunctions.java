@@ -288,9 +288,9 @@ public class NetworkFunctions {
         String parameter_type = StringValues.NetworkValues.PARAMETER_TYPE_BODY;
 
         try{
-            String[] stringSplits = requestString.split("\r\n\r\n");
+            String[] stringSplits = requestString.split("\n\n");
             String headAndInfo = stringSplits[0];
-            String[] headersAndInfo = headAndInfo.split("\r\n");
+            String[] headersAndInfo = headAndInfo.split("\n");
 
             String info = headersAndInfo[0];
             method = info.split(" ")[0];
@@ -302,11 +302,12 @@ public class NetworkFunctions {
                 method = StringValues.NetworkValues.REQUEST_TYPE_GET;
             }
             else{
-                System.out.println("False");
+
             }
             for (int i = 1; i < headersAndInfo.length; i++) {
                 String row = headersAndInfo[i];
                 headerParams.put(row.split(": ")[0],row.substring(row.indexOf(": ")+2));
+
             }
             if(method == StringValues.NetworkValues.REQUEST_TYPE_GET){
                 requestData = URLParseFunctions.getGetRequestParams(endpoint);

@@ -28,6 +28,8 @@ public class Sniper implements IntruderType{
     public boolean isStopped;
     private boolean isRunning;
     private int totalWordCount = 0;
+    @FXML
+    private Label fuzzParamLabel;
 
     @Override
     public void fuzz(String _requestText) {
@@ -51,7 +53,7 @@ public class Sniper implements IntruderType{
                                         @Override
                                         public void run(){
                                             String word = wordObservableList.get(finalJ).toString();
-                                            String requestText = _requestText.replace("FUZZ",word);
+                                            String requestText = _requestText.replace("FUZZ0",word);
                                             RequestModel requestModel = NetworkFunctions.stringToRequestModel(requestText, StringValues.NetworkValues.REQUEST_TYPE_INTRUDER);
                                             requestModel.setWord(word);
                                             try {
@@ -112,7 +114,7 @@ public class Sniper implements IntruderType{
     @Override
     public void initIntruder() {
         wordsListView.setItems(wordObservableList);
-
+        fuzzParamLabel.setText("FUZZ0");
     }
 
     @Override
@@ -137,5 +139,8 @@ public class Sniper implements IntruderType{
             bufferedReader.close();
             fileReader.close();
         }
+    }
+    public void setParamName(String paramName){
+        this.fuzzParamLabel.setText(paramName);
     }
 }

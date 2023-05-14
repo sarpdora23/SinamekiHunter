@@ -37,8 +37,10 @@ public class Intruder implements ControllersParent{
     @FXML
     private Pane typePane;
     private int speed = 1;
+    private int paramCounter = 0;
 
     public IntruderType intruderType;
+    public MultiParams multiParams;
     public void setRequest(String requestText){
         requestTextArea.setText(requestText);
     }
@@ -58,12 +60,25 @@ public class Intruder implements ControllersParent{
                     this.typePane.getChildren().clear();
                     this.typePane.getChildren().add(fxmlLoader.load());
                     this.intruderType = fxmlLoader.getController();
+                    this.multiParams = null;
                     this.intruderType.initIntruder();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }else if (Objects.equals(newValue,StringValues.IntruderTypes.BATTERING_RAM)){
-                this.typePane.getChildren().clear();
+                FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.BATTERING_RAM_VIEW_FXML));
+                try {
+                    this.typePane.getChildren().clear();
+                    this.typePane.getChildren().add(fxmlLoader.load());
+                    this.intruderType = fxmlLoader.getController();
+                    this.multiParams = fxmlLoader.getController();
+                    this.intruderType.initIntruder();
+                    this.multiParams.getParamCounter(paramCounter);
+
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else if (Objects.equals(newValue,StringValues.IntruderTypes.PITCHFORK)) {
                 this.typePane.getChildren().clear();
             } else if (Objects.equals(newValue,StringValues.IntruderTypes.CLUSTERBOMB)) {
@@ -79,32 +94,30 @@ public class Intruder implements ControllersParent{
     }
     @FXML
     protected void addFuzzParam(){
-        if (!isFuzzParam){
-            String requestText = requestTextArea.getText();
-            IndexRange selectionRange = requestTextArea.getSelection();
-            String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ" + requestText.substring(selectionRange.getEnd());
-            requestTextArea.setText(newRequestText);
-            isFuzzParam = true;
+        String requestText = requestTextArea.getText();
+        IndexRange selectionRange = requestTextArea.getSelection();
+        String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ"+paramCounter + requestText.substring(selectionRange.getEnd());
+        requestTextArea.setText(newRequestText);
+        isFuzzParam = true;
+        paramCounter++;
+        if (multiParams != null){
+            multiParams.getParamCounter(paramCounter);
         }
-        else {
-            String requestText = requestTextArea.getText();
-            requestText = requestText.replace("FUZZ","");
-            IndexRange selectionRange = requestTextArea.getSelection();
-            String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ" + requestText.substring(selectionRange.getEnd());
-            requestTextArea.setText(newRequestText);
-            isFuzzParam = true;
-        }
-
     }
     @FXML
     protected void deleteFuzzParam(){
-        String requestText = requestTextArea.getText();
-        if (requestText.indexOf("FUZZ") != -1){
-            String newRequestText = requestText.replace("FUZZ","");
-            requestTextArea.setText(newRequestText);
-            isFuzzParam = false;
+        if (paramCounter != 0){
+            String requestText = requestTextArea.getText();
+            if (requestText.indexOf("FUZZ") != -1){
+                paramCounter--;
+                String newRequestText = requestText.replace("FUZZ"+paramCounter,"");
+                requestTextArea.setText(newRequestText);
+                isFuzzParam = false;
+                if (multiParams != null){
+                    multiParams.getParamCounter(paramCounter);
+                }
+            }
         }
-
     }
     @FXML
     protected void startFuzzing() throws IOException {
@@ -138,6 +151,7 @@ public class Intruder implements ControllersParent{
             errorLabel.setText("You must select wordlist and FUZZ part.");
         }
     }
+    public int getParamCounter(){return this.paramCounter;}
     private void runningError(boolean isStopped){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Intruder");

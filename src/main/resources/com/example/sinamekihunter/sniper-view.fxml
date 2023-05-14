@@ -6,9 +6,11 @@
 <?import javafx.scene.layout.Pane?>
 
 <Pane prefHeight="339.0" prefWidth="319.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sinamekihunter.Controllers.Sniper">
-    <Label layoutX="75.0" layoutY="37.0" text="Wordlist:" />
-    <Button layoutX="129.0" layoutY="33.0" mnemonicParsing="false" onAction="#selectWordList" prefHeight="29.0" prefWidth="73.0" />
-    <Label fx:id="wordListNameLabel" layoutX="31.0" layoutY="74.0" text="deneme" />
+    <Label layoutX="74.0" layoutY="49.0" text="Wordlist:" />
+    <Button layoutX="128.0" layoutY="45.0" mnemonicParsing="false" onAction="#selectWordList" prefHeight="29.0" prefWidth="73.0" />
+    <Label fx:id="wordListNameLabel" layoutX="31.0" layoutY="74.0" />
     <ListView fx:id="wordsListView" editable="true" layoutX="13.0" layoutY="104.0" prefHeight="199.0" prefWidth="294.0" />
+   <Label layoutX="78.0" layoutY="14.0" text="Parameters:" />
+   <Label fx:id="fuzzParamLabel" layoutX="146.0" layoutY="14.0" text="Label" />
 
 </Pane>

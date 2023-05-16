@@ -17,23 +17,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Sniper implements IntruderType{
+public class Sniper extends IntruderParent{
     @FXML
     private Label wordListNameLabel;
     @FXML
     private ListView wordsListView;
     private File wordList;
     private ObservableList wordObservableList = FXCollections.observableList(new ArrayList<>());
-    private int speed = 1;
-    public boolean isStopped;
-    private boolean isRunning;
-    private int totalWordCount = 0;
     @FXML
     private Label fuzzParamLabel;
 
     @Override
     public void fuzz(String _requestText) {
-        this.totalWordCount = wordObservableList.size();
+        totalWordCount = wordObservableList.size();
         Thread bigThread = new Thread(){
             @Override
             public void run(){
@@ -85,26 +81,7 @@ public class Sniper implements IntruderType{
     public File getWordlist() {
         return this.wordList;
     }
-
-    @Override
-    public boolean getIsRunning() {
-        return this.isRunning;
-    }
-
-    @Override
-    public boolean getIsStopped() {
-        return this.isStopped;
-    }
-
-    @Override
-    public void setRunning(boolean newValue) {
-        this.isRunning = newValue;
-    }
-
-    @Override
-    public void setStopped(boolean newValue) {
-        this.isStopped = newValue;
-    }
+    public ObservableList getWordObservableList(){return this.wordObservableList;}
 
     @Override
     public int getTotalWordCount() {
@@ -115,11 +92,6 @@ public class Sniper implements IntruderType{
     public void initIntruder() {
         wordsListView.setItems(wordObservableList);
         fuzzParamLabel.setText("FUZZ0");
-    }
-
-    @Override
-    public void setSpeed(int newValue) {
-        this.speed = newValue;
     }
 
     @FXML

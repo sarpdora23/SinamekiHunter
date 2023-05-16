@@ -39,7 +39,7 @@ public class Intruder implements ControllersParent{
     private int speed = 1;
     private int paramCounter = 0;
 
-    public IntruderType intruderType;
+    public IntruderParent intruderType;
     public MultiParams multiParams;
     public void setRequest(String requestText){
         requestTextArea.setText(requestText);
@@ -89,7 +89,8 @@ public class Intruder implements ControllersParent{
             speedLabel.setText(String.valueOf(newValue.intValue()));
             speed = newValue.intValue();
             speedSlider.setValue(newValue.intValue());
-            this.intruderType.setSpeed(speed);
+            intruderType.speed = speed;
+
         });
     }
     @FXML
@@ -97,12 +98,15 @@ public class Intruder implements ControllersParent{
         String requestText = requestTextArea.getText();
         IndexRange selectionRange = requestTextArea.getSelection();
         String newRequestText = requestText.substring(0, selectionRange.getStart()) + "FUZZ"+paramCounter + requestText.substring(selectionRange.getEnd());
+        int start = selectionRange.getStart();
+        int end = selectionRange.getEnd();
         requestTextArea.setText(newRequestText);
         isFuzzParam = true;
         paramCounter++;
         if (multiParams != null){
             multiParams.getParamCounter(paramCounter);
         }
+
     }
     @FXML
     protected void deleteFuzzParam(){
@@ -121,7 +125,7 @@ public class Intruder implements ControllersParent{
     }
     @FXML
     protected void startFuzzing() throws IOException {
-        if (isFuzzParam && intruderType.getWordlist() != null){
+        if (intruderType.getWordlist() != null){
             if (!intruderType.getIsRunning()){
                 intruderType.setRunning(true);
                 intruderType.setStopped(false);

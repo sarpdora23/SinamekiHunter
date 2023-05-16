@@ -117,6 +117,7 @@ public class DiscoveryResult implements ControllersParent {
         return satirSayisi;
     }
     public void updateRequest(RequestModel requestModel){
+
         this.requestThreadModel.addCompleteRequest(requestModel);
         int completedRequest = this.requestThreadModel.getCompletedRequestCounter();
         String progress_string = completedRequest + "/" + totalWordCount;
@@ -149,6 +150,7 @@ public class DiscoveryResult implements ControllersParent {
 
     }
     public void updateIntruderRequest(RequestModel requestModel){
+
         compReq++;
         int completedRequest = compReq;
         String progress_string = completedRequest + "/" + totalWordCount;

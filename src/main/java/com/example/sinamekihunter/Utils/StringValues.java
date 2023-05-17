@@ -39,6 +39,7 @@ public class StringValues {
         public static final String INTRUDER_VIEW_FXML = "intruder-view.fxml";
         public static final String SNIPER_VIEW_FXML = "sniper-view.fxml";
         public static final String BATTERING_RAM_VIEW_FXML = "battering-ram-view.fxml";
+        public static final String PITCHFORK_VIEW_FXML = "pitchfork-view.fxml";
     }
     public class NetworkValues{
         public static final String REQUEST_TYPE_GET = "GET";

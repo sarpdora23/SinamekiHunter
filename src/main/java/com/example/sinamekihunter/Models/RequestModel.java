@@ -32,6 +32,7 @@ public class RequestModel extends Thread {
     private ArrayList<ControlledVuln> controlled_vulns = new ArrayList<>();
     private ArrayList<String> possible_vulns = new ArrayList<>();
     private boolean isValid = true;
+    private String xml_data;
     public RequestModel(){
         this.isValid = false;
     }
@@ -91,6 +92,7 @@ public class RequestModel extends Thread {
     public String getRequestType(){return this.request_type;}
     public String getRequestText(){return this.request_text;}
     public String getUid(){return this.id;}
+    public String getXml_data(){return this.xml_data;}
     public OutputStream getOutputStream(){return this.outputStream;}
     public SocketModel getSocketModel(){return this.socketModel;}
     public ArrayList<ControlledVuln> getControlledVulns(){return this.controlled_vulns;}
@@ -101,7 +103,9 @@ public class RequestModel extends Thread {
         this.request_data = body_data;
         updateGetRequestUrl();
     }
-
+    public void setXml_data(String xmlData){
+        this.xml_data = xmlData;
+    }
     public void setHeaderData(HashMap<String, Object> header_data) {
         this.header_data = header_data;
     }

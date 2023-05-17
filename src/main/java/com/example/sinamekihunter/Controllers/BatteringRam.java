@@ -28,7 +28,7 @@ public class BatteringRam extends IntruderParent implements MultiParams{
         Thread bigThread = new Thread(){
             @Override
             public void run(){
-                for (int i = 0; i < (totalWordCount) - speed; i+=speed) {
+                for (int i = 0; i <= (totalWordCount) - speed; i+=speed) {
                     int finalI = i;
 
                     if(isStopped){

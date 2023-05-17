@@ -4,23 +4,31 @@ import com.example.sinamekihunter.Models.RequestModel;
 import com.example.sinamekihunter.SinamekiApplication;
 import com.example.sinamekihunter.Utils.NetworkFunctions;
 import com.example.sinamekihunter.Utils.StringValues;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Pitchfork extends IntruderParent implements MultiParams{
+public class ClusterBomb extends IntruderParent implements MultiParams{
     private int paramCounter = 0;
     @FXML
     private HBox sniperHbox;
     private ArrayList<Sniper> sniperList = new ArrayList<Sniper>();
+    private int control = 0;
     @Override
     public void fuzz(String requestText) {
+        ArrayList<Integer> wordCount = new ArrayList<>();
+        HashMap<Integer,Integer> indexWord = new HashMap();
+        int a = 0;
+        for (Sniper sniperPayload:sniperList) {
+            wordCount.add(sniperPayload.getTotalWordCount());
+            indexWord.put(a,0);
+            a++;
+        }
         String _requestText = requestText;
         System.out.println("TOTAL WORD COUNT:" +getTotalWordCount());
         this.totalWordCount = getTotalWordCount();
@@ -47,18 +55,34 @@ public class Pitchfork extends IntruderParent implements MultiParams{
                                         public void run(){
 
                                             String requestText = _requestText;
-                                            String word = sniperList.get(0).getWordObservableList().get(finalJ).toString();
+                                            ArrayList wordList = new ArrayList<>();
+                                            for (int i = 0; i < wordCount.size(); i++) {
+                                                wordList.add(sniperList.get(i).getWordObservableList().get((Integer) indexWord.get(i)));
+                                            }
                                             for (int i = 0; i < paramCounter; i++) {
-                                                requestText = requestText.replace("FUZZ"+i,sniperList.get(i).getWordObservableList().get(finalJ).toString());
+                                                requestText = requestText.replace("FUZZ"+i,wordList.get(i).toString());
                                             }
                                             RequestModel requestModel = NetworkFunctions.stringToRequestModel(requestText, StringValues.NetworkValues.REQUEST_TYPE_INTRUDER);
-                                            requestModel.setWord(word);
+                                            requestModel.setWord((String) wordList.get(0));
+
 
                                             try {
                                                 NetworkFunctions.sendRequest(requestModel);
                                             } catch (IOException e) {
                                                 throw new RuntimeException(e);
                                             }
+                                            try{
+                                                int c = 0;
+                                                indexWord.replace(c,(Integer)indexWord.get(c) +1);
+                                                while (indexWord.get(c) >= wordCount.get(c)){
+                                                    indexWord.replace(c,0);
+                                                    c++;
+                                                    indexWord.replace(c,indexWord.get(c) + 1);
+                                                }
+                                            }catch (NullPointerException e){
+
+                                            }
+
                                         }
                                     };
                                     threadPiece.start();
@@ -85,11 +109,9 @@ public class Pitchfork extends IntruderParent implements MultiParams{
     }
     @Override
     public int getTotalWordCount() {
-        int i = sniperList.get(0).getTotalWordCount();
+        int i = 1;
         for (Sniper sniperPayload:sniperList) {
-            if (sniperPayload.getTotalWordCount() < i){
-                i=sniperPayload.getTotalWordCount();
-            }
+           i = i * sniperPayload.getTotalWordCount();
         }
         return i;
     }
@@ -139,3 +161,4 @@ public class Pitchfork extends IntruderParent implements MultiParams{
 
     }
 }
+

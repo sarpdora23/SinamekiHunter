@@ -94,7 +94,17 @@ public class Intruder implements ControllersParent{
                     throw new RuntimeException(e);
                 }
             } else if (Objects.equals(newValue,StringValues.IntruderTypes.CLUSTERBOMB)) {
-                this.typePane.getChildren().clear();
+                FXMLLoader fxmlLoader = new FXMLLoader(SinamekiApplication.class.getResource(StringValues.FXMLNames.CLUSTERBOMB_VIEW_FXML));
+                try {
+                    this.typePane.getChildren().clear();
+                    this.typePane.getChildren().add(fxmlLoader.load());
+                    this.intruderType = fxmlLoader.getController();
+                    this.multiParams = fxmlLoader.getController();
+                    this.multiParams.getParamCounter(paramCounter);
+                    this.intruderType.initIntruder();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         speedSlider.valueProperty().addListener((observable, oldValue, newValue) -> {

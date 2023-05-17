@@ -107,6 +107,11 @@ public class NetworkFunctions {
                     StringEntity stringEntity = new StringEntity(hashmapToString(requestModel.getRequestData()), ContentType.APPLICATION_JSON);
                     putRequest.setEntity(stringEntity);
                 }
+                else if (requestModel.getRequestType().equals(StringValues.NetworkValues.PARAMETER_TYPE_XML)){
+                    //TODO TÜM BODY ŞEYSİLERİ NEDEN HASHMAP YAPIYORSUN DİREKT STRİNG YAP YOLLA BOŞA CONVERTLEME
+                    StringEntity stringEntity = new StringEntity(requestModel.getXml_data(),ContentType.APPLICATION_ATOM_XML);
+                    putRequest.setEntity(stringEntity);
+                }
                 else{
                     String body = "";
 
@@ -195,7 +200,7 @@ public class NetworkFunctions {
         String method = "";
         String endpoint = "";
         String parameter_type = StringValues.NetworkValues.PARAMETER_TYPE_BODY;
-
+        String xmlData = "";
         String[] stringSplits = requestString.split("\r\n\r\n");
         String headAndInfo = stringSplits[0];
         String[] headersAndInfo = headAndInfo.split("\r\n");
@@ -233,9 +238,7 @@ public class NetworkFunctions {
         }
         else{
             if (stringSplits.length > 1){
-
                 String body = stringSplits[1];
-
                 if(body.indexOf('{') == -1 && body.indexOf('}') == -1){
                     String[] params = body.split("&");
                     parameter_type = StringValues.NetworkValues.PARAMETER_TYPE_BODY;
@@ -244,8 +247,10 @@ public class NetworkFunctions {
                         if(parameter.length < 2){ requestData.put(parameter[0],"");}
                         else{requestData.put(parameter[0],parameter[1]);}
                     }
-                }
-                else{
+                } else if (body.indexOf('<') != -1 && body.indexOf('>') != -1) {
+                    xmlData = body;
+                    parameter_type = StringValues.NetworkValues.PARAMETER_TYPE_XML;
+                } else{
                     parameter_type = StringValues.NetworkValues.PARAMETER_TYPE_BODY;
                     requestData = jsonToHashMap(body);
                 }
@@ -253,6 +258,7 @@ public class NetworkFunctions {
         }
 
         RequestModel createdRequestModel = new RequestModel(endpoint,method,headerParams,requestData,parameter_type,requestString,outputStream,inputStreamToByteArray(inputStream));
+        createdRequestModel.setXml_data(xmlData);
         return createdRequestModel;
     }
     public static String requestModelToString(RequestModel requestModel){

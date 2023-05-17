@@ -33,7 +33,7 @@ public class Sniper extends IntruderParent{
         Thread bigThread = new Thread(){
             @Override
             public void run(){
-                for (int i = 0; i < wordObservableList.size() - speed; i+=speed) {
+                for (int i = 0; i <= wordObservableList.size() - speed; i+=speed) {
                     int finalI = i;
                     if(isStopped){
                         isRunning = false;
